@@ -139,7 +139,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void stop() {
     _player2.stop();
-    print(_player2);
   }
 
   //1個目の時間を設定する関数
