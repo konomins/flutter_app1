@@ -106,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (switch_text1 == "設定しました" && set_time1 == now_time) {
       count1 = 1;
-      //play();
+      play();
     }
     if (switch_text2 == "設定しました" && set_time2 == now_time) {
       count2 = 1;
@@ -137,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _player2 = await _player.play('sounds/a.mp3');
   }
 
-  void stop() {
+  void _stop() {
     _player2.stop();
   }
 
@@ -452,7 +452,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text("stop"),
               color: Colors.green,
               textColor:Colors.white,
-              onPressed: () => stop(),
+              onPressed: () => _stop(),
 
             ),
       ]
