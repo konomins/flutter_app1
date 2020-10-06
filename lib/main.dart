@@ -133,16 +133,17 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   //音楽の再生と停止の関数
-  play() async {
-    _player2 = await _player.loop('sounds/a.mp3');
+  void play() async {
+    _player2 = await _player.play('sounds/a.mp3');
   }
 
-  stop() async {
+  void stop() {
     _player2.stop();
+    print(_player2);
   }
 
   //1個目の時間を設定する関数
-  Future<Null> _selectTime1(BuildContext context) async {
+  Future<void> _selectTime1(BuildContext context) async {
     final TimeOfDay picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
@@ -156,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   //2個目の時間を設定する関数
-  Future<Null> _selectTime2(BuildContext context) async {
+  Future<void> _selectTime2(BuildContext context) async {
     final TimeOfDay picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
@@ -170,7 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   //3個目の時間を設定する関数
-  Future<Null> _selectTime3(BuildContext context) async {
+  Future<void> _selectTime3(BuildContext context) async {
     final TimeOfDay picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
@@ -184,7 +185,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   //4個目の時間を設定する関数
-  Future<Null> _selectTime4(BuildContext context) async {
+  Future<void> _selectTime4(BuildContext context) async {
     final TimeOfDay picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
@@ -198,7 +199,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   //5個目の時間を設定する関数
-  Future<Null> _selectTime5(BuildContext context) async {
+  Future<void> _selectTime5(BuildContext context) async {
     final TimeOfDay picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
@@ -452,7 +453,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text("stop"),
               color: Colors.green,
               textColor:Colors.white,
-              onPressed: () => _player2.stop(),
+              onPressed: () => stop(),
 
             ),
       ]
