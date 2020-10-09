@@ -91,6 +91,9 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _active5 = false;
   String switch_text5= "設定していません.";
 
+  //音声ファイル
+  var url1 = 'https://smartomaizu.com/ringtones/%e7%9b%ae%e8%a6%9a%e3%81%be%e3%81%97%e9%9f%b3/0/su1014.mp3';
+
 
   void initState() { //現在時刻を取得する関数
     Timer.periodic(
