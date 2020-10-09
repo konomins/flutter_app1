@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 //import 'game1.dart';
 
 void main() {
@@ -143,7 +144,9 @@ class _MyHomePageState extends State<MyHomePage> {
   //音楽の再生と停止の関数
   void play()  async {
     final dir = await getApplicationDocumentsDirectory();
-    await _player2.play('${dir.path}/assets/a.mp3',isLocal: true);
+    final file = File('${dir.path}/sounds/a.mp3');
+
+    await _player2.play(file.path,isLocal: true);
     //_player2.play('sounds/a.mp3');
   }
 
