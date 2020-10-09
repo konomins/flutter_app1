@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import 'dart:async';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:path_provider/path_provider.dart';
+//import 'game1.dart';
 
 void main() {
   runApp(MyApp());
@@ -20,6 +22,12 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(title: '目覚まし'),
+    /*  initialRoute: '/',
+      routes: {
+        '/': (content) => MainPage(),
+        '/game1': (content) => Game1(),
+      },
+     */
     );
   }
 }
@@ -39,7 +47,6 @@ class _MyHomePageState extends State<MyHomePage> {
   //ローカルassetから音源を流すために必要
   AudioCache _player = AudioCache();
   AudioPlayer _player2 = AudioPlayer();
-
 
 
   //時間を設定
@@ -132,13 +139,12 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() => judge5 = count5);
   }
 
-  //音楽の再生と停止の関数
-  void play() async {
-    _player2 = await _player.play('sounds/a.mp3');
-  }
 
-  void _stop() {
-    _player2.stop();
+  //音楽の再生と停止の関数
+  void play()  async {
+    final dir = await getApplicationDocumentsDirectory();
+    await _player2.play('${dir.path}/assets/a.mp3',isLocal: true);
+    //_player2.play('sounds/a.mp3');
   }
 
   //1個目の時間を設定する関数
@@ -452,7 +458,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text("stop"),
               color: Colors.green,
               textColor:Colors.white,
-              onPressed: () => _stop(),
+              onPressed: () => _player2.stop(),
 
             ),
       ]
