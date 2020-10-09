@@ -103,6 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
 
+
   void _onTimer(Timer timer) {
     //現在時刻を時、分にフォーマットし、アラームを鳴らす関数
     var now = DateTime.now();
@@ -147,10 +148,10 @@ class _MyHomePageState extends State<MyHomePage> {
   //音楽の再生と停止の関数
   void play()  async {
     final dir = await getApplicationDocumentsDirectory();
-    final file = File('${dir.path}/sounds/a.mp3');
+    final file = File('${dir.path}/a.mp3');
 
     await _player2.play(file.path,isLocal: true);
-    //_player2.play('sounds/a.mp3');
+    //_player2 = await _player.play('sounds/a.mp3');
   }
 
   //1個目の時間を設定する関数
