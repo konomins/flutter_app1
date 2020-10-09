@@ -46,8 +46,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   //ローカルassetから音源を流すために必要
-  AudioCache _player = AudioCache();
-  AudioPlayer _player2 = AudioPlayer();
+   AudioCache _player = AudioCache();
+   AudioPlayer _player2 = AudioPlayer();
 
 
   //時間を設定
@@ -101,6 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _onTimer,
     );
     super.initState();
+    //_player.loop('sounds/a.mp3').then((player) => _player2 = player);
   }
 
 
@@ -147,11 +148,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //音楽の再生と停止の関数
   void play()  async {
-    final dir = await getApplicationDocumentsDirectory();
-    final file = File('${dir.path}/a.mp3');
+    _player2?.stop();
+    _player2 = await _player.loop('sounds/a.mp3');
 
-    await _player2.play(file.path,isLocal: true);
-    //_player2 = await _player.play('sounds/a.mp3');
   }
 
   //1個目の時間を設定する関数
@@ -466,11 +465,10 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Colors.green,
               textColor:Colors.white,
               onPressed: () => _player2.stop(),
-
             ),
-      ]
-      ),
-      ),
+    ]
+    ),
+    ),
     );
   }
 }
