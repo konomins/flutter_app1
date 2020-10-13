@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       home: MyHomePage(title: '目覚まし'),
       routes: <String, WidgetBuilder> {
         '/home': (BuildContext context) => new MyHomePage(),
-        '/subpage': (BuildContext context) => new GamePage()
+        '/subpage': (BuildContext context) => new SubPage()
       },
     );
   }
@@ -83,10 +83,6 @@ class _MyHomePageState extends State<MyHomePage> {
   //5個目
   bool _active5 = false;
   String switch_text5= "設定していません.";
-
-  //音声ファイル
-  //var url1 = 'https://smartomaizu.com/ringtones/%e7%9b%ae%e8%a6%9a%e3%81%be%e3%81%97%e9%9f%b3/0/su1014.mp3';
-
 
   void initState() { //現在時刻を取得する関数
     Timer.periodic(
@@ -470,18 +466,35 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class GamePage extends StatelessWidget{
+
+//静的 (計算ゲーム画面)
+class SubPage extends StatelessWidget{
   @override
   Widget build(BuildContext content) {
     return new Scaffold(
+      backgroundColor: Colors.black,
       appBar: new AppBar(
-        title: const Text('今日の問題'),
+        title: const Text('今日の問題',
+        style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Colors.black,
       ),
       body: Center(
-        child: Column(
-        ),
+        child: _GamePage(),
       ),
     );
+  }
+}
+
+class _GamePage extends StatefulWidget {
+  @override
+
+  _GamePageState createState() => _GamePageState();
+}
+
+class _GamePageState extends State<_GamePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }
