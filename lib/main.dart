@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'dart:async';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 //import 'game1.dart';
 
@@ -11,7 +10,7 @@ void main() {
   runApp(MyApp());
 }
 
-//静的
+//静的(時間を設定する画面)
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -23,12 +22,10 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(title: '目覚まし'),
-    /*  initialRoute: '/',
-      routes: {
-        '/': (content) => MainPage(),
-        '/game1': (content) => Game1(),
+      routes: <String, WidgetBuilder> {
+        '/home': (BuildContext context) => new MyHomePage(),
+        '/subpage': (BuildContext context) => new GamePage()
       },
-     */
     );
   }
 }
@@ -61,11 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String now_time = '';
 
   //セットした時間と今の時間が同じかどうか判定(仮)
-  var judge1 = 0;
-  var judge2 = 0;
-  var judge3 = 0;
-  var judge4 = 0;
-  var judge5 = 0;
+   var judge = 0;
 
   //音楽を鳴らす判定
   var music = 0;
@@ -111,46 +104,40 @@ class _MyHomePageState extends State<MyHomePage> {
     var formatter = DateFormat('HH:mm');
     now_time = formatter.format(now);
 
-    var count1 = 0;
-    var count2 = 0;
-    var count3 = 0;
-    var count4 = 0;
-    var count5 = 0;
-
     if (switch_text1 == "設定しました" && set_time1 == now_time) {
-      count1 = 1;
+      judge++;
       play();
     }
-    if (switch_text2 == "設定しました" && set_time2 == now_time) {
-      count2 = 1;
+    else if (switch_text2 == "設定しました" && set_time2 == now_time) {
+      judge++;
       play();
     }
-    if (switch_text3 == "設定しました" && set_time3 == now_time) {
-      count3 = 1;
+    else if (switch_text3 == "設定しました" && set_time3 == now_time) {
+      judge++;
       play();
     }
-    if (switch_text4 == "設定しました" && set_time4 == now_time) {
-      count4 = 1;
+    else if (switch_text4 == "設定しました" && set_time4 == now_time) {
+      judge++;
       play();
     }
-    if (switch_text5 == "設定しました" && set_time5 == now_time) {
-      count5 = 1;
+    else if (switch_text5 == "設定しました" && set_time5 == now_time) {
+      judge++;
       play();
     }
-
-    setState(() => judge1 = count1);
-    setState(() => judge2 = count2);
-    setState(() => judge3 = count3);
-    setState(() => judge4 = count4);
-    setState(() => judge5 = count5);
   }
 
 
   //音楽の再生と停止の関数
   void play()  async {
-    _player2?.stop();
-    _player2 = await _player.loop('sounds/a.mp3');
+    if(judge == 1){
+      // _player2?.stop();
+      _player2 = await _player.loop('sounds/a.mp3');
+    }
+  }
 
+  void stop() {
+    _player2.stop();
+    judge = 0;
   }
 
   //1個目の時間を設定する関数
@@ -248,6 +235,9 @@ class _MyHomePageState extends State<MyHomePage> {
               style: TextStyle(
                 fontSize: 25.0,
               ),
+            ),
+            Text(
+              "設定していない状態にし、止めてください"
             ),
 
             Container(//1個目の時間設定
@@ -464,11 +454,34 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Text("stop"),
               color: Colors.green,
               textColor:Colors.white,
-              onPressed: () => _player2.stop(),
+              //onPressed: () => _player2.stop(),
+              onPressed: () => stop(),
+            ),
+            RaisedButton(
+              child: Text("遷移"),
+              color: Colors.green,
+              textColor:Colors.white,
+              onPressed:() => Navigator.of(context).pushNamed("/subpage"),
             ),
     ]
     ),
     ),
+    );
+  }
+}
+
+class GamePage extends StatelessWidget{
+  @override
+  Widget build(BuildContext content) {
+    return new Scaffold(
+      appBar: new AppBar(
+        title: const Text('今日の問題'),
+        backgroundColor: Colors.black,
+      ),
+      body: Center(
+        child: Column(
+        ),
+      ),
     );
   }
 }
