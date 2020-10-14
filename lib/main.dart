@@ -512,6 +512,9 @@ class _GamePageState extends State<_GamePage> {
   String answer2 = '10893';
   String answer3 = '172840';
 
+  //正解個数
+  var correct_count = 0;
+
   //乱数の使用
   var rand = new math.Random();
 
@@ -520,25 +523,57 @@ class _GamePageState extends State<_GamePage> {
 
   //1問目を回答する関数
   void _q1Text(String e) {
+    String judge = 'x';
 
-    setState(() {
-      _q1 = e;
-    });
+    //文字の入力を画面に反映
+    setState(() { _q1 = e;});
+    //入力した回答が正解かの判定
+    if (_q1 == answer1){
+      judge = '〇';
+      correct_count++;
+    }
+    setState(() { answer_judge1 = judge;});
+
+    if(answer_judge1 == '〇' && answer_judge2 == '〇' && answer_judge3 == '〇'){
+      Navigator.of(context).pop();
+    }
+
   }
 
   //2問目を回答する関数
   void _q2Text(String e) {
-    setState(() {
-      _q2 = e;
-    });
+    String judge = 'x';
+
+    setState(() { _q2 = e;});
+
+    if(_q2 == answer2){
+      judge = '〇';
+    }
+
+    setState(() { answer_judge2 = judge;});
+
+    if(answer_judge1 == '〇' && answer_judge2 == '〇' && answer_judge3 == '〇'){
+      Navigator.of(context).pop();
+    }
   }
 
   //3問目を回答する関数
   void _q3Text(String e) {
-    setState(() {
-      _q3 = e;
-    });
+    String judge = 'x';
+
+    setState(() { _q3 = e;});
+
+    if(_q3 == answer3){
+      judge = '〇';
+    }
+
+    setState(() { answer_judge3 = judge;});
+
+    if(answer_judge1 == '〇' && answer_judge2 == '〇' && answer_judge3 == '〇'){
+      Navigator.of(context).pop();
+    }
   }
+
 
   Widget build(BuildContext context) {
     return Scaffold(
