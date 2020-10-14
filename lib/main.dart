@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'dart:async';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'dart:math' as math;
+import 'dart:math';
 import 'dart:io';
 //import 'game1.dart';
 
@@ -47,6 +47,8 @@ class _MyHomePageState extends State<MyHomePage> {
    AudioCache _player = AudioCache();
    AudioPlayer _player2 = AudioPlayer();
 
+   //遷移判定
+   var count = 0;
 
   //時間を設定
   String set_time1 = '00:00';
@@ -85,6 +87,9 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _active5 = false;
   String switch_text5= "設定していません.";
 
+  //ボタンを押すように表示
+  String push_text = '';
+
   void initState() { //現在時刻を取得する関数
     Timer.periodic(
       Duration(seconds: 1),
@@ -104,30 +109,55 @@ class _MyHomePageState extends State<MyHomePage> {
     if (switch_text1 == "設定しました" && set_time1 == now_time) {
       judge++;
       play();
+      Navigator.of(context).pushNamed("/subpage");
+      switch_text1 = "設定されていません";
+      setState(() {
+        push_text = "ストップボタンを押してください";
+      });
     }
     else if (switch_text2 == "設定しました" && set_time2 == now_time) {
       judge++;
       play();
+      Navigator.of(context).pushNamed("/subpage");
+      switch_text2 = "設定されていません";
+      setState(() {
+        push_text = "ストップボタンを押してください";
+      });
     }
     else if (switch_text3 == "設定しました" && set_time3 == now_time) {
       judge++;
       play();
+      Navigator.of(context).pushNamed("/subpage");
+      switch_text3 = "設定されていません";
+      setState(() {
+        push_text = "ストップボタンを押してください";
+      });
     }
     else if (switch_text4 == "設定しました" && set_time4 == now_time) {
       judge++;
       play();
+      Navigator.of(context).pushNamed("/subpage");
+      switch_text4 = "設定されていません";
+      setState(() {
+        push_text = "ストップボタンを押してください";
+      });
     }
     else if (switch_text5 == "設定しました" && set_time5 == now_time) {
       judge++;
       play();
+      Navigator.of(context).pushNamed("/subpage");
+      switch_text5 = "設定されていません";
+      setState(() {
+        push_text = "ストップボタンを押してください";
+      });
     }
+
   }
 
 
   //音楽の再生と停止の関数
   void play()  async {
     if(judge == 1){
-      // _player2?.stop();
       _player2 = await _player.loop('sounds/a.mp3');
     }
   }
@@ -135,6 +165,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void stop() {
     _player2.stop();
     judge = 0;
+    setState(() { push_text = '';
+    });
   }
 
   //1個目の時間を設定する関数
@@ -232,9 +264,6 @@ class _MyHomePageState extends State<MyHomePage> {
               style: TextStyle(
                 fontSize: 25.0,
               ),
-            ),
-            Text(
-              "設定していない状態にし、止めてください"
             ),
 
             Container(//1個目の時間設定
@@ -442,23 +471,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ),
-   //   Text("$judge1"),
-   //   Text("$judge2"),
-   //   Text("$judge3"),
-   //   Text("$judge4"),
-   //   Text("$judge5"),
+            Text(
+              push_text,
+              style: TextStyle(
+                fontSize: 49.0,
+              ),
+            ),
             RaisedButton(
               child: Text("stop"),
               color: Colors.green,
               textColor:Colors.white,
               //onPressed: () => _player2.stop(),
               onPressed: () => stop(),
-            ),
-            RaisedButton(
-              child: Text("遷移"),
-              color: Colors.green,
-              textColor:Colors.white,
-              onPressed:() => Navigator.of(context).pushNamed("/subpage"),
             ),
     ]
     ),
@@ -477,9 +501,9 @@ class SubPage extends StatelessWidget{
       appBar: new AppBar(
 
         title: const Text('今日の問題',
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: Colors.black,
+       // backgroundColor: Colors.black,
       ),
       body: Center(
         child: _GamePage(),
@@ -516,10 +540,10 @@ class _GamePageState extends State<_GamePage> {
   var correct_count = 0;
 
   //乱数の使用
-  var rand = new math.Random();
+  //var random = new Random();
 
   //乱数
-  //var q1_0 = rand.nextInt(10);
+ // var rand = random.nextDouble(33.0);
 
   //1問目を回答する関数
   void _q1Text(String e) {
@@ -577,9 +601,10 @@ class _GamePageState extends State<_GamePage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-        appBar: AppBar(
-        ),
+     // backgroundColor: Colors.white,
+        //appBar: AppBar(
+       //   backgroundColor: Colors.white.withOpacity(0.0),
+      //  ),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -587,7 +612,7 @@ class _GamePageState extends State<_GamePage> {
               Text(
                 'それぞれの式の下にある解答欄に答えを入力してください',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontSize: 15.0,
                 )
               ),
@@ -608,8 +633,8 @@ class _GamePageState extends State<_GamePage> {
                 maxLength: 4,
                 maxLengthEnforced: true,
                 style: TextStyle(
-                  color:Colors.white,
-                  fontSize: 24.0,
+                  color:Colors.black,
+                  fontSize: 23.0,
                 ),
                 obscureText: false,
                 maxLines:1,
@@ -627,13 +652,15 @@ class _GamePageState extends State<_GamePage> {
                 ),
                 ),
               ),
-              new TextField(
+
+              new  TextField(
                 enabled: true,
                 maxLength: 5,
                 maxLengthEnforced: true,
+                cursorColor: Colors.red,
                 style: TextStyle(
-                  color:Colors.white,
-                  fontSize: 24.0,
+                  color:Colors.black,
+                  fontSize: 23.0,
                 ),
                 obscureText: false,
                 maxLines:1,
@@ -656,8 +683,8 @@ class _GamePageState extends State<_GamePage> {
                 maxLength: 6,
                 maxLengthEnforced: true,
                 style: TextStyle(
-                  color:Colors.white,
-                  fontSize: 24.0,
+                  color:Colors.black,
+                  fontSize: 23.0,
                 ),
                 obscureText: false,
                 maxLines:1,
