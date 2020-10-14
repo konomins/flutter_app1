@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'dart:async';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'dart:math' as math;
 import 'dart:io';
 //import 'game1.dart';
 
@@ -474,6 +475,7 @@ class SubPage extends StatelessWidget{
     return new Scaffold(
       backgroundColor: Colors.black,
       appBar: new AppBar(
+
         title: const Text('今日の問題',
         style: TextStyle(color: Colors.white),
         ),
@@ -494,7 +496,141 @@ class _GamePage extends StatefulWidget {
 
 class _GamePageState extends State<_GamePage> {
   @override
+
+  //回答の入力
+  String _q1 = '0';
+  String _q2 = '0';
+  String _q3 = '0';
+
+  //回答の判定
+  String answer_judge1 = 'x';
+  String answer_judge2 = 'x';
+  String answer_judge3 = 'x';
+
+  //回答
+  String answer1 = '1311';
+  String answer2 = '10893';
+  String answer3 = '172840';
+
+  //乱数の使用
+  var rand = new math.Random();
+
+  //乱数
+  //var q1_0 = rand.nextInt(10);
+
+  //1問目を回答する関数
+  void _q1Text(String e) {
+
+    setState(() {
+      _q1 = e;
+    });
+  }
+
+  //2問目を回答する関数
+  void _q2Text(String e) {
+    setState(() {
+      _q2 = e;
+    });
+  }
+
+  //3問目を回答する関数
+  void _q3Text(String e) {
+    setState(() {
+      _q3 = e;
+    });
+  }
+
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      backgroundColor: Colors.black,
+        appBar: AppBar(
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'それぞれの式の下にある解答欄に答えを入力してください',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15.0,
+                )
+              ),
+             Container(
+               color : Colors.black,
+               width: 380.0,
+               height: 40.0,
+               child:Text(//2桁×2桁
+                  '23 × 57 =' + _q1 + '    判定:' + answer_judge1,
+                 style: TextStyle(
+                   fontSize: 24.0,
+                   color: Colors.white,
+                 ),
+               ),
+             ),
+              new TextField(
+                enabled: true,
+                maxLength: 4,
+                maxLengthEnforced: true,
+                style: TextStyle(
+                  color:Colors.white,
+                  fontSize: 24.0,
+                ),
+                obscureText: false,
+                maxLines:1,
+                onChanged: _q1Text,
+              ),
+              Container(//4桁 + 4桁
+                color : Colors.black,
+                width: 380.0,
+                height: 40.0,
+                child: Text(
+                  '3586 + 7307 =' + _q2 + '    判定:' + answer_judge2,
+                style: TextStyle(
+                  fontSize: 24.0,
+                  color:Colors.white,
+                ),
+                ),
+              ),
+              new TextField(
+                enabled: true,
+                maxLength: 5,
+                maxLengthEnforced: true,
+                style: TextStyle(
+                  color:Colors.white,
+                  fontSize: 24.0,
+                ),
+                obscureText: false,
+                maxLines:1,
+                onChanged: _q2Text,
+              ),
+              Container(
+                color: Colors.black,
+                width: 380.0,
+                height: 40.0,
+                child: Text(//3桁×3桁
+                  '596 × 290 = '+ _q3 + '    判定:' + answer_judge3,
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              new TextField(
+                enabled: true,
+                maxLength: 6,
+                maxLengthEnforced: true,
+                style: TextStyle(
+                  color:Colors.white,
+                  fontSize: 24.0,
+                ),
+                obscureText: false,
+                maxLines:1,
+                onChanged: _q3Text,
+              ),
+          ]
+          ),
+        ),
+    );
   }
 }
