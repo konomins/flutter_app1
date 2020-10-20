@@ -522,15 +522,15 @@ class _GamePageState extends State<_GamePage> {
 
   //問題(乱数)
   //問1: 2桁×1桁 問2: 2桁+2桁 問3: 3桁-2桁
-  int q1_n1 = Random().nextInt(99);
-  int q1_n2 = Random().nextInt(9);
+  int q1_n1 = Random().nextInt(100);
+  int q1_n2 = Random().nextInt(10);
 
 
-  int q2_n1 = Random().nextInt(99);
-  int q2_n2 = Random().nextInt(99);
+  int q2_n1 = Random().nextInt(100);
+  int q2_n2 = Random().nextInt(100);
 
-  int q3_n1 = Random().nextInt(999);
-  int q3_n2 = Random().nextInt(99);
+  int q3_n1 = Random().nextInt(1000);
+  int q3_n2 = Random().nextInt(100);
 
   //回答の入力
   String _a1 = '0';
@@ -745,35 +745,67 @@ class _AccGame extends StatefulWidget {
 class _AccGameState extends State< _AccGame>
 {
 
+  //加速度データ取得
   List<double> _userAccelerometerValues;
   List<StreamSubscription<dynamic>> _streamSubcriptions = <StreamSubscription<dynamic>>[];
 
+
   Widget build(BuildContext context) {
 
-    final List<String> userAccelerometer = _userAccelerometerValues?.map((double v) => v.toStringAsFixed(1))
-        ?.toList();
+    //桁数変換(STring型)
     final String accel_x = _userAccelerometerValues[0].toStringAsFixed(1);
     final String accel_y = _userAccelerometerValues[1].toStringAsFixed(1);
     final String accel_z = _userAccelerometerValues[2].toStringAsFixed(1);
+
+    //数値比較のため変換
+    double x_data = double.parse(accel_x);
+    double y_data = double.parse(accel_y);
+    double z_data = double.parse(accel_z);
+
+    //加速度データが一定以上になればクリア
+    if( x_data > 2.0 || y_data > 2.0 || z_data > 2.0 || x_data < -2.0 || y_data < -2.0 || z_data < -2.0){
+      Navigator.of(context).pop();
+    }
 
     return Scaffold(
         body: Center(
         child: Column(
             children: <Widget>[
-              Text('userAccelermeter: $userAccelerometer',),
-              Text('X_data: ' + accel_x),
-              Text('Y_data: ' + accel_y),
-              Text('Z_data: ' + accel_z),
+              Text('X_data: ' +  accel_x,
+              style: TextStyle(
+                fontSize: 30.0,
+              )),
+              Text('Y_data: ' + accel_y,
+              style: TextStyle(
+                fontSize: 30.0,
+              )),
+              Text('Z_data: ' + accel_z,
+              style: TextStyle(
+                fontSize: 30.0,
+              )),
+
+              Text('X,Y,Z軸のいずれかの値を2以上にしてください',
+              style: TextStyle(
+                fontSize: 20.0,
+              ),
+              ),
           ]
         ),
         ),
     );
   }
 
+  void dispose() {//画面切り替え時:加速度データ取得を止める
+    super.dispose();
+    for (StreamSubscription<dynamic> subscription in _streamSubcriptions) {
+      subscription.cancel();
+    }
+  }
+
   void initState() {
     super.initState();
     _streamSubcriptions
-        .add(accelerometerEvents.listen((AccelerometerEvent event) {
+        .add(userAccelerometerEvents.listen((UserAccelerometerEvent event) {
       setState(() {
         _userAccelerometerValues = <double>[event.x, event.y, event.z];
       });
