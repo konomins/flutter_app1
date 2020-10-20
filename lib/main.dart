@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'dart:math';
+import 'package:sensors/sensors.dart';
 import 'dart:io';
 //import 'game1.dart';
 
@@ -25,7 +26,8 @@ class MyApp extends StatelessWidget {
       home: MyHomePage(title: '目覚まし'),
       routes: <String, WidgetBuilder> {
         '/home': (BuildContext context) => new MyHomePage(),
-        '/subpage': (BuildContext context) => new SubPage()
+        '/first_page': (BuildContext context) => new SubPage(),
+        '/second_page': (BuildContext content) => new SubPage1(),
       },
     );
   }
@@ -106,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (switch_text1 == "設定しました" && set_time1 == now_time) {
       judge++;
       play();
-      Navigator.of(context).pushNamed("/subpage");
+      Navigator.of(context).pushNamed("/first_page");
       switch_text1 = "設定されていません";
       setState(() {
       });
@@ -114,7 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
     else if (switch_text2 == "設定しました" && set_time2 == now_time) {
       judge++;
       play();
-      Navigator.of(context).pushNamed("/subpage");
+      Navigator.of(context).pushNamed("/first_page");
       switch_text2 = "設定されていません";
       setState(() {
       });
@@ -122,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
     else if (switch_text3 == "設定しました" && set_time3 == now_time) {
       judge++;
       play();
-      Navigator.of(context).pushNamed("/subpage");
+      Navigator.of(context).pushNamed("/first_page");
       switch_text3 = "設定されていません";
       setState(() {
       });
@@ -130,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
     else if (switch_text4 == "設定しました" && set_time4 == now_time) {
       judge++;
       play();
-      Navigator.of(context).pushNamed("/subpage");
+      Navigator.of(context).pushNamed("/first_page");
       switch_text4 = "設定されていません";
       setState(() {
       });
@@ -138,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
     else if (switch_text5 == "設定しました" && set_time5 == now_time) {
       judge++;
       play();
-      Navigator.of(context).pushNamed("/subpage");
+      Navigator.of(context).pushNamed("/first_page");
       switch_text5 = "設定されていません";
       setState(() {
       });
@@ -474,6 +476,12 @@ class _MyHomePageState extends State<MyHomePage> {
               //onPressed: () => _player2.stop(),
               onPressed: () => stop(),
             ),
+            RaisedButton(
+              child: Text("遷移"),
+              color: Colors.green,
+              textColor:Colors.white,
+              onPressed: () => Navigator.of(context).pushNamed("/second_page"),
+            ),
     ]
     ),
     ),
@@ -705,5 +713,70 @@ class _GamePageState extends State<_GamePage> {
           ),
         ),
     );
+  }
+}
+
+//静的(加速度ゲーム)
+class SubPage1 extends StatelessWidget {
+  @override
+
+  Widget build(BuildContext content) {
+    return new Scaffold(
+      backgroundColor: Colors.black,
+      appBar: new AppBar(
+
+        title: const Text('加速度ゲーム',
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
+      body: Center(
+        child: _AccGame(),
+      ),
+    );
+  }
+}
+
+class _AccGame extends StatefulWidget {
+  @override
+
+  _AccGameState createState() => _AccGameState();
+}
+
+class _AccGameState extends State< _AccGame>
+{
+
+  List<double> _userAccelerometerValues;
+  List<StreamSubscription<dynamic>> _streamSubcriptions = <StreamSubscription<dynamic>>[];
+
+  Widget build(BuildContext context) {
+
+    final List<String> userAccelerometer = _userAccelerometerValues?.map((double v) => v.toStringAsFixed(1))
+        ?.toList();
+    final String accel_x = _userAccelerometerValues[0].toStringAsFixed(1);
+    final String accel_y = _userAccelerometerValues[1].toStringAsFixed(1);
+    final String accel_z = _userAccelerometerValues[2].toStringAsFixed(1);
+
+    return Scaffold(
+        body: Center(
+        child: Column(
+            children: <Widget>[
+              Text('userAccelermeter: $userAccelerometer',),
+              Text('X_data: ' + accel_x),
+              Text('Y_data: ' + accel_y),
+              Text('Z_data: ' + accel_z),
+          ]
+        ),
+        ),
+    );
+  }
+
+  void initState() {
+    super.initState();
+    _streamSubcriptions
+        .add(accelerometerEvents.listen((AccelerometerEvent event) {
+      setState(() {
+        _userAccelerometerValues = <double>[event.x, event.y, event.z];
+      });
+    }));
   }
 }
