@@ -87,9 +87,6 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _active5 = false;
   String switch_text5= "設定していません.";
 
-  //ボタンを押すように表示
-  String push_text = '';
-
   void initState() { //現在時刻を取得する関数
     Timer.periodic(
       Duration(seconds: 1),
@@ -112,7 +109,6 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.of(context).pushNamed("/subpage");
       switch_text1 = "設定されていません";
       setState(() {
-        push_text = "ストップボタンを押してください";
       });
     }
     else if (switch_text2 == "設定しました" && set_time2 == now_time) {
@@ -121,7 +117,6 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.of(context).pushNamed("/subpage");
       switch_text2 = "設定されていません";
       setState(() {
-        push_text = "ストップボタンを押してください";
       });
     }
     else if (switch_text3 == "設定しました" && set_time3 == now_time) {
@@ -130,7 +125,6 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.of(context).pushNamed("/subpage");
       switch_text3 = "設定されていません";
       setState(() {
-        push_text = "ストップボタンを押してください";
       });
     }
     else if (switch_text4 == "設定しました" && set_time4 == now_time) {
@@ -139,7 +133,6 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.of(context).pushNamed("/subpage");
       switch_text4 = "設定されていません";
       setState(() {
-        push_text = "ストップボタンを押してください";
       });
     }
     else if (switch_text5 == "設定しました" && set_time5 == now_time) {
@@ -148,7 +141,6 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.of(context).pushNamed("/subpage");
       switch_text5 = "設定されていません";
       setState(() {
-        push_text = "ストップボタンを押してください";
       });
     }
 
@@ -165,8 +157,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void stop() {
     _player2.stop();
     judge = 0;
-    setState(() { push_text = '';
-    });
   }
 
   //1個目の時間を設定する関数
@@ -472,7 +462,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             Text(
-              push_text,
+              "ストップボタンを押すと音が止まります",
               style: TextStyle(
                 fontSize: 49.0,
               ),
@@ -521,10 +511,23 @@ class _GamePage extends StatefulWidget {
 class _GamePageState extends State<_GamePage> {
   @override
 
+
+  //問題(乱数)
+  //問1: 2桁×1桁 問2: 2桁+2桁 問3: 3桁-2桁
+  int q1_n1 = Random().nextInt(99);
+  int q1_n2 = Random().nextInt(9);
+
+
+  int q2_n1 = Random().nextInt(99);
+  int q2_n2 = Random().nextInt(99);
+
+  int q3_n1 = Random().nextInt(999);
+  int q3_n2 = Random().nextInt(99);
+
   //回答の入力
-  String _q1 = '0';
-  String _q2 = '0';
-  String _q3 = '0';
+  String _a1 = '0';
+  String _a2 = '0';
+  String _a3 = '0';
 
   //回答の判定
   String answer_judge1 = 'x';
@@ -532,27 +535,25 @@ class _GamePageState extends State<_GamePage> {
   String answer_judge3 = 'x';
 
   //回答
-  String answer1 = '1311';
-  String answer2 = '10893';
-  String answer3 = '172840';
+  String answer1 = '';
+  String answer2 = '';
+  String answer3 = '';
+
 
   //正解個数
   var correct_count = 0;
 
-  //乱数の使用
-  //var random = new Random();
-
-  //乱数
- // var rand = random.nextDouble(33.0);
-
   //1問目を回答する関数
   void _q1Text(String e) {
+    var temp = q1_n1 * q1_n2;
     String judge = 'x';
 
+    //答え判定
+    setState(() {answer1 = temp.toString();});
     //文字の入力を画面に反映
-    setState(() { _q1 = e;});
+    setState(() { _a1 = e;});
     //入力した回答が正解かの判定
-    if (_q1 == answer1){
+    if (_a1 == answer1){
       judge = '〇';
       correct_count++;
     }
@@ -567,10 +568,13 @@ class _GamePageState extends State<_GamePage> {
   //2問目を回答する関数
   void _q2Text(String e) {
     String judge = 'x';
+    var temp = q2_n1 + q2_n2;
 
-    setState(() { _q2 = e;});
+    setState(() {answer2 = temp.toString();});
 
-    if(_q2 == answer2){
+    setState(() { _a2 = e;});
+
+    if(_a2 == answer2){
       judge = '〇';
     }
 
@@ -584,10 +588,14 @@ class _GamePageState extends State<_GamePage> {
   //3問目を回答する関数
   void _q3Text(String e) {
     String judge = 'x';
+    var temp = q3_n1 - q3_n2;
 
-    setState(() { _q3 = e;});
 
-    if(_q3 == answer3){
+    setState(() {answer3 = temp.toString();});
+
+    setState(() { _a3 = e;});
+
+    if(_a3 == answer3){
       judge = '〇';
     }
 
@@ -620,8 +628,8 @@ class _GamePageState extends State<_GamePage> {
                color : Colors.black,
                width: 380.0,
                height: 40.0,
-               child:Text(//2桁×2桁
-                  '23 × 57 =' + _q1 + '    判定:' + answer_judge1,
+               child:Text(//2桁×1桁
+                   q1_n1.toString() + '×' +  q1_n2.toString() + '=' +  _a1 +  '    判定:' + answer_judge1,
                  style: TextStyle(
                    fontSize: 24.0,
                    color: Colors.white,
@@ -630,7 +638,7 @@ class _GamePageState extends State<_GamePage> {
              ),
               new TextField(
                 enabled: true,
-                maxLength: 4,
+                maxLength: 3,
                 maxLengthEnforced: true,
                 style: TextStyle(
                   color:Colors.black,
@@ -640,12 +648,12 @@ class _GamePageState extends State<_GamePage> {
                 maxLines:1,
                 onChanged: _q1Text,
               ),
-              Container(//4桁 + 4桁
+              Container(//2桁 + 2桁
                 color : Colors.black,
                 width: 380.0,
                 height: 40.0,
                 child: Text(
-                  '3586 + 7307 =' + _q2 + '    判定:' + answer_judge2,
+                  q2_n1.toString() + '+' +  q2_n2.toString() + '=' +  _a2 +  '    判定:' + answer_judge2,
                 style: TextStyle(
                   fontSize: 24.0,
                   color:Colors.white,
@@ -655,7 +663,7 @@ class _GamePageState extends State<_GamePage> {
 
               new  TextField(
                 enabled: true,
-                maxLength: 5,
+                maxLength: 3,
                 maxLengthEnforced: true,
                 cursorColor: Colors.red,
                 style: TextStyle(
@@ -670,8 +678,8 @@ class _GamePageState extends State<_GamePage> {
                 color: Colors.black,
                 width: 380.0,
                 height: 40.0,
-                child: Text(//3桁×3桁
-                  '596 × 290 = '+ _q3 + '    判定:' + answer_judge3,
+                child: Text(//3桁-2桁
+                  q3_n1.toString() + '-' +  q3_n2.toString() + '=' +  _a3 +  '    判定:' + answer_judge3,
                   style: TextStyle(
                     fontSize: 24.0,
                     color: Colors.white,
@@ -680,7 +688,7 @@ class _GamePageState extends State<_GamePage> {
               ),
               new TextField(
                 enabled: true,
-                maxLength: 6,
+                maxLength: 3,
                 maxLengthEnforced: true,
                 style: TextStyle(
                   color:Colors.black,
@@ -690,6 +698,9 @@ class _GamePageState extends State<_GamePage> {
                 maxLines:1,
                 onChanged: _q3Text,
               ),
+              Text(
+                answer2,
+              )
           ]
           ),
         ),
