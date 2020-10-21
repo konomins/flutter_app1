@@ -89,6 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _active5 = false;
   String switch_text5= "設定していません.";
 
+
   void initState() { //現在時刻を取得する関数
     Timer.periodic(
       Duration(seconds: 1),
@@ -105,10 +106,23 @@ class _MyHomePageState extends State<MyHomePage> {
     var formatter = DateFormat('HH:mm');
     now_time = formatter.format(now);
 
+    //遷移画面判定
+    int scene = Random().nextInt(2);
+    //0の場合: 計算ゲーム
+    //1の場合:加速度ゲーム
+
+
+
     if (switch_text1 == "設定しました" && set_time1 == now_time) {
       judge++;
       play();
-      Navigator.of(context).pushNamed("/first_page");
+      if(scene == 0){
+        Navigator.of(context).pushNamed("/first_page");
+      }
+      else if(scene == 1){
+        Navigator.of(context).pushNamed("/second_page");
+      }
+
       switch_text1 = "設定されていません";
       setState(() {
       });
@@ -116,7 +130,12 @@ class _MyHomePageState extends State<MyHomePage> {
     else if (switch_text2 == "設定しました" && set_time2 == now_time) {
       judge++;
       play();
-      Navigator.of(context).pushNamed("/first_page");
+      if(scene == 0){
+        Navigator.of(context).pushNamed("/first_page");
+      }
+      else if(scene == 1){
+        Navigator.of(context).pushNamed("/second_page");
+      }
       switch_text2 = "設定されていません";
       setState(() {
       });
@@ -124,7 +143,12 @@ class _MyHomePageState extends State<MyHomePage> {
     else if (switch_text3 == "設定しました" && set_time3 == now_time) {
       judge++;
       play();
-      Navigator.of(context).pushNamed("/first_page");
+      if(scene == 0){
+        Navigator.of(context).pushNamed("/first_page");
+      }
+      else if(scene == 1){
+        Navigator.of(context).pushNamed("/second_page");
+      }
       switch_text3 = "設定されていません";
       setState(() {
       });
@@ -132,7 +156,12 @@ class _MyHomePageState extends State<MyHomePage> {
     else if (switch_text4 == "設定しました" && set_time4 == now_time) {
       judge++;
       play();
-      Navigator.of(context).pushNamed("/first_page");
+      if(scene == 0){
+        Navigator.of(context).pushNamed("/first_page");
+      }
+      else if(scene == 1){
+        Navigator.of(context).pushNamed("/second_page");
+      }
       switch_text4 = "設定されていません";
       setState(() {
       });
@@ -140,7 +169,12 @@ class _MyHomePageState extends State<MyHomePage> {
     else if (switch_text5 == "設定しました" && set_time5 == now_time) {
       judge++;
       play();
-      Navigator.of(context).pushNamed("/first_page");
+      if(scene == 0){
+        Navigator.of(context).pushNamed("/first_page");
+      }
+      else if(scene == 1){
+        Navigator.of(context).pushNamed("/second_page");
+      }
       switch_text5 = "設定されていません";
       setState(() {
       });
@@ -746,69 +780,79 @@ class _AccGameState extends State< _AccGame>
 {
 
   //加速度データ取得
-  List<double> _userAccelerometerValues;
+  //nullの例外処理は初期値を与えることでなくなる
+  List<double> _Acceler_Values = [0,0,0];
   List<StreamSubscription<dynamic>> _streamSubcriptions = <StreamSubscription<dynamic>>[];
 
+  //pop判定
+  int _pop = 1;
+
+
+  void dispose() {//画面切り替え時:加速度データ取得を止める
+    super.dispose();
+    for (StreamSubscription<dynamic> subscription in _streamSubcriptions) {
+      subscription.cancel();
+
+    }
+  }
+
+  void initState() {//.addで毎回データが入力されるため判定を行うと複数実行される可能性がある
+    super.initState();
+    _streamSubcriptions
+        .add(userAccelerometerEvents.listen((UserAccelerometerEvent event) {
+      setState(() {
+        _Acceler_Values = <double>[event.x, event.y, event.z];
+        if(_pop == 1) {
+          Accer_game_Judge();
+        }
+      });
+    }));
+  }
+
+  void Accer_game_Judge() {
+    if (
+        _Acceler_Values[0] > 13.0 || _Acceler_Values[1] > 13.0 ||
+        _Acceler_Values[0] < -13.0 || _Acceler_Values[1] < -13.0
+    ) {
+      Navigator.of(context).pop();
+      _pop = 0;
+    }
+  }
 
   Widget build(BuildContext context) {
 
-    //桁数変換(STring型)
-    final String accel_x = _userAccelerometerValues[0].toStringAsFixed(1);
-    final String accel_y = _userAccelerometerValues[1].toStringAsFixed(1);
-    final String accel_z = _userAccelerometerValues[2].toStringAsFixed(1);
-
-    //数値比較のため変換
-    double x_data = double.parse(accel_x);
-    double y_data = double.parse(accel_y);
-    double z_data = double.parse(accel_z);
-
-    //加速度データが一定以上になればクリア
-    if( x_data > 2.0 || y_data > 2.0 || z_data > 2.0 || x_data < -2.0 || y_data < -2.0 || z_data < -2.0){
-      Navigator.of(context).pop();
-    }
+    final String accel_x = _Acceler_Values[0].toStringAsFixed(1);
+    final String accel_y = _Acceler_Values[1].toStringAsFixed(1);
 
     return Scaffold(
         body: Center(
         child: Column(
             children: <Widget>[
-              Text('X_data: ' +  accel_x,
+              Text('X_data:  $accel_x',
               style: TextStyle(
                 fontSize: 30.0,
               )),
-              Text('Y_data: ' + accel_y,
+              Text('Y_data:  $accel_y',
               style: TextStyle(
                 fontSize: 30.0,
               )),
-              Text('Z_data: ' + accel_z,
-              style: TextStyle(
-                fontSize: 30.0,
-              )),
-
-              Text('X,Y,Z軸のいずれかの値を2以上にしてください',
+              Text('縦、横にスマホを振り、'
+              ,
               style: TextStyle(
                 fontSize: 20.0,
               ),
               ),
+              Text('13以上または-13未満にしましょう'
+                ,
+                style: TextStyle(
+                  fontSize: 20.0,
+                ),
+              ),
+              new Image.asset('images/GameDescription.PNG',width: 380.0, height:380.0),
           ]
         ),
         ),
     );
   }
 
-  void dispose() {//画面切り替え時:加速度データ取得を止める
-    super.dispose();
-    for (StreamSubscription<dynamic> subscription in _streamSubcriptions) {
-      subscription.cancel();
-    }
-  }
-
-  void initState() {
-    super.initState();
-    _streamSubcriptions
-        .add(userAccelerometerEvents.listen((UserAccelerometerEvent event) {
-      setState(() {
-        _userAccelerometerValues = <double>[event.x, event.y, event.z];
-      });
-    }));
-  }
 }
