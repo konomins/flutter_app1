@@ -71,23 +71,23 @@ class _MyHomePageState extends State<MyHomePage> {
   //各スイッチの値を表示
   //1個目
   bool _active1 = false;
-  String switch_text1= "設定していません.";
+  String switch_text1= "設定していないよ.";
 
   //2個目
   bool _active2 = false;
-  String switch_text2= "設定していません.";
+  String switch_text2= "設定していないよ.";
 
   //3個目
   bool _active3 = false;
-  String switch_text3= "設定していません.";
+  String switch_text3= "設定していないよ.";
 
   //4個目
   bool _active4 = false;
-  String switch_text4= "設定していません.";
+  String switch_text4= "設定していないよ.";
 
   //5個目
   bool _active5 = false;
-  String switch_text5= "設定していません.";
+  String switch_text5= "設定していないよ.";
 
 
   void initState() { //現在時刻を取得する関数
@@ -113,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
 
-    if (switch_text1 == "設定しました" && set_time1 == now_time) {
+    if (switch_text1 == "設定しているよ" && set_time1 == now_time) {
       judge++;
       play();
       if(scene == 0){
@@ -123,11 +123,11 @@ class _MyHomePageState extends State<MyHomePage> {
         Navigator.of(context).pushNamed("/second_page");
       }
 
-      switch_text1 = "設定されていません";
+      switch_text1 = "設定していないよ";
       setState(() {
       });
     }
-    else if (switch_text2 == "設定しました" && set_time2 == now_time) {
+    else if (switch_text2 == "設定しているよ" && set_time2 == now_time) {
       judge++;
       play();
       if(scene == 0){
@@ -136,11 +136,11 @@ class _MyHomePageState extends State<MyHomePage> {
       else if(scene == 1){
         Navigator.of(context).pushNamed("/second_page");
       }
-      switch_text2 = "設定されていません";
+      switch_text2 = "設定していないよ";
       setState(() {
       });
     }
-    else if (switch_text3 == "設定しました" && set_time3 == now_time) {
+    else if (switch_text3 == "設定しているよ" && set_time3 == now_time) {
       judge++;
       play();
       if(scene == 0){
@@ -149,11 +149,11 @@ class _MyHomePageState extends State<MyHomePage> {
       else if(scene == 1){
         Navigator.of(context).pushNamed("/second_page");
       }
-      switch_text3 = "設定されていません";
+      switch_text3 = "設定していないよ";
       setState(() {
       });
     }
-    else if (switch_text4 == "設定しました" && set_time4 == now_time) {
+    else if (switch_text4 == "設定しているよ" && set_time4 == now_time) {
       judge++;
       play();
       if(scene == 0){
@@ -162,11 +162,11 @@ class _MyHomePageState extends State<MyHomePage> {
       else if(scene == 1){
         Navigator.of(context).pushNamed("/second_page");
       }
-      switch_text4 = "設定されていません";
+      switch_text4 = "設定していないよ";
       setState(() {
       });
     }
-    else if (switch_text5 == "設定しました" && set_time5 == now_time) {
+    else if (switch_text5 == "設定しているよ" && set_time5 == now_time) {
       judge++;
       play();
       if(scene == 0){
@@ -175,7 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
       else if(scene == 1){
         Navigator.of(context).pushNamed("/second_page");
       }
-      switch_text5 = "設定されていません";
+      switch_text5 = "設定していないよ";
       setState(() {
       });
     }
@@ -286,7 +286,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Text(
-              "時間を設定してください.",
+              "時間を設定しよう.",
               style: TextStyle(
                 fontSize: 25.0,
               ),
@@ -298,15 +298,21 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Colors.grey,
               margin:EdgeInsets.all(10.0),
               child: Row(
-                  children: <Widget>[
-                    new RaisedButton(
-                          onPressed: () => _selectTime1(context),
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(right:10.0),
+                  ),
+                  new RaisedButton(
+                      onPressed: () => _selectTime1(context),
                       child: new Text(set_time1,
                         style: TextStyle(
                           fontSize: 25.0,
                         ),
                       ),
                     ),
+                  Padding(
+                    padding: EdgeInsets.only(right:5.0),
+                  ),
 
                     new Switch(
                       value: _active1,
@@ -318,14 +324,17 @@ class _MyHomePageState extends State<MyHomePage> {
                         setState(() {
                           _active1 = value;
                           if(_active1 == true) {
-                            switch_text1 = '設定しました';
+                            switch_text1 = '設定しているよ';
                           }
                           else {
-                            switch_text1 = '設定されていません';
+                            switch_text1 = '設定していないよ';
                           }
                         });
                       },
                     ),
+                  Padding(
+                    padding: EdgeInsets.only(right:5.0),
+                  ),
                     Text(switch_text1),
 
 
@@ -341,6 +350,9 @@ class _MyHomePageState extends State<MyHomePage> {
             margin:EdgeInsets.all(10.0),
             child: Row(
               children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(right:10.0),
+                ),
                 new RaisedButton(
                   onPressed: () => _selectTime2(context),
                   child: new Text(set_time2,
@@ -348,6 +360,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       fontSize: 25.0,
                     ),
                   ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.only(right:5.0),
                 ),
 
                 new Switch(
@@ -360,13 +376,16 @@ class _MyHomePageState extends State<MyHomePage> {
                     setState(() {
                       _active2 = value;
                       if(_active2 == true) {
-                        switch_text2 = '設定しました';
+                        switch_text2 = '設定しているよ';
                       }
                       else {
-                        switch_text2 = '設定されていません';
+                        switch_text2 = '設定していないよ';
                       }
                     });
                   },
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right:5.0),
                 ),
                 Text(switch_text2),
 
@@ -382,6 +401,9 @@ class _MyHomePageState extends State<MyHomePage> {
               margin:EdgeInsets.all(10.0),
               child: Row(
                 children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(right:10.0),
+                  ),
                   new RaisedButton(
                     onPressed: () => _selectTime3(context),
                     child: new Text(set_time3,
@@ -389,6 +411,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         fontSize: 25.0,
                       ),
                     ),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.only(right:5.0),
                   ),
 
                   new Switch(
@@ -401,14 +427,19 @@ class _MyHomePageState extends State<MyHomePage> {
                       setState(() {
                         _active3 = value;
                         if(_active3 == true) {
-                          switch_text3 = '設定しました';
+                          switch_text3 = '設定しているよ';
                         }
                         else {
-                          switch_text3 = '設定されていません';
+                          switch_text3 = '設定していないよ';
                         }
                       });
                     },
                   ),
+
+                  Padding(
+                    padding: EdgeInsets.only(right:5.0),
+                  ),
+
                   Text(switch_text3),
 
 
@@ -423,6 +454,9 @@ class _MyHomePageState extends State<MyHomePage> {
               margin:EdgeInsets.all(10.0),
               child: Row(
                 children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(right:10.0),
+                  ),
                   new RaisedButton(
                     onPressed: () => _selectTime4(context),
                     child: new Text(set_time4,
@@ -430,6 +464,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         fontSize: 25.0,
                       ),
                     ),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.only(right:5.0),
                   ),
 
                   new Switch(
@@ -442,14 +480,19 @@ class _MyHomePageState extends State<MyHomePage> {
                       setState(() {
                         _active4 = value;
                         if(_active4 == true) {
-                          switch_text4 = '設定しました';
+                          switch_text4 = '設定しているよ';
                         }
                         else {
-                          switch_text4 = '設定されていません';
+                          switch_text4 = '設定していないよ';
                         }
                       });
                     },
                   ),
+
+                  Padding(
+                    padding: EdgeInsets.only(right:5.0),
+                  ),
+
                   Text(switch_text4),
 
 
@@ -464,6 +507,9 @@ class _MyHomePageState extends State<MyHomePage> {
               margin:EdgeInsets.all(10.0),
               child: Row(
                 children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(right:10.0),
+                  ),
                   new RaisedButton(
                     onPressed: () => _selectTime5(context),
                     child: new Text(set_time5,
@@ -471,6 +517,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         fontSize: 25.0,
                       ),
                     ),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.only(right:5.0),
                   ),
 
                   new Switch(
@@ -483,14 +533,19 @@ class _MyHomePageState extends State<MyHomePage> {
                       setState(() {
                         _active5 = value;
                         if(_active5 == true) {
-                          switch_text5 = '設定しました';
+                          switch_text5 = '設定しているよ';
                         }
                         else {
-                          switch_text5 = '設定されていません';
+                          switch_text5 = '設定していないよ';
                         }
                       });
                     },
                   ),
+
+                  Padding(
+                    padding: EdgeInsets.only(right:5.0),
+                  ),
+
                   Text(switch_text5),
 
 
@@ -498,11 +553,22 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             Text(
-              "ストップボタンを押すと音が止まります",
+              "ストップボタンを押すと",
               style: TextStyle(
-                fontSize: 49.0,
+                fontSize: 34.0,
               ),
             ),
+            Text(
+            "アラームが止まるよ",
+              style: TextStyle(
+                fontSize: 34.0,
+              ),
+            ),
+
+            Padding(
+              padding: EdgeInsets.only(bottom:15.0),
+            ),
+
             RaisedButton(
               child: Text("stop"),
               color: Colors.green,
@@ -510,12 +576,13 @@ class _MyHomePageState extends State<MyHomePage> {
               //onPressed: () => _player2.stop(),
               onPressed: () => stop(),
             ),
-            RaisedButton(
+           /* RaisedButton(
               child: Text("遷移"),
               color: Colors.green,
               textColor:Colors.white,
               onPressed: () => Navigator.of(context).pushNamed("/second_page"),
             ),
+            */
     ]
     ),
     ),
@@ -531,7 +598,7 @@ class SubPage extends StatelessWidget{
     return new Scaffold(
       backgroundColor: Colors.black,
       appBar: new AppBar(
-
+        automaticallyImplyLeading: false,
         title: const Text('今日の問題',
         style: TextStyle(color: Colors.black),
         ),
@@ -656,95 +723,106 @@ class _GamePageState extends State<_GamePage> {
        //   backgroundColor: Colors.white.withOpacity(0.0),
       //  ),
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'それぞれの式の下にある解答欄に答えを入力してください',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15.0,
-                )
-              ),
-             Container(
-               color : Colors.black,
-               width: 380.0,
-               height: 40.0,
-               child:Text(//2桁×1桁
-                   q1_n1.toString() + '×' +  q1_n2.toString() + '=' +  _a1 +  '    判定:' + answer_judge1,
-                 style: TextStyle(
-                   fontSize: 24.0,
-                   color: Colors.white,
-                 ),
-               ),
-             ),
-              new TextField(
-                enabled: true,
-                maxLength: 3,
-                maxLengthEnforced: true,
-                style: TextStyle(
-                  color:Colors.black,
-                  fontSize: 23.0,
-                ),
-                obscureText: false,
-                maxLines:1,
-                onChanged: _q1Text,
-              ),
-              Container(//2桁 + 2桁
-                color : Colors.black,
-                width: 380.0,
-                height: 40.0,
-                child: Text(
-                  q2_n1.toString() + '+' +  q2_n2.toString() + '=' +  _a2 +  '    判定:' + answer_judge2,
-                style: TextStyle(
-                  fontSize: 24.0,
-                  color:Colors.white,
-                ),
-                ),
-              ),
-
-              new  TextField(
-                enabled: true,
-                maxLength: 3,
-                maxLengthEnforced: true,
-                cursorColor: Colors.red,
-                style: TextStyle(
-                  color:Colors.black,
-                  fontSize: 23.0,
-                ),
-                obscureText: false,
-                maxLines:1,
-                onChanged: _q2Text,
-              ),
-              Container(
-                color: Colors.black,
-                width: 380.0,
-                height: 40.0,
-                child: Text(//3桁-2桁
-                  q3_n1.toString() + '-' +  q3_n2.toString() + '=' +  _a3 +  '    判定:' + answer_judge3,
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    color: Colors.white,
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(top:5.0),
                   ),
-                ),
-              ),
-              new TextField(
-                enabled: true,
-                maxLength: 3,
-                maxLengthEnforced: true,
-                style: TextStyle(
-                  color:Colors.black,
-                  fontSize: 23.0,
-                ),
-                obscureText: false,
-                maxLines:1,
-                onChanged: _q3Text,
-              ),
-              Text(
-                answer2,
-              )
-          ]
-          ),
+                  Text(
+                      'それぞれの式の下にある解答欄に答えを入力しよう',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15.0,
+                      )
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.only(top:5.0),
+                  ),
+
+                  Container(
+                    color : Colors.black,
+                    width: 380.0,
+                    height: 39.0,
+                      padding: EdgeInsets.only(left:10.0),
+                    child:Text(//2桁×1桁
+                      q1_n1.toString() + ' × ' +  q1_n2.toString() + ' = ' +  _a1 +  '    判定: ' + answer_judge1,
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  new TextField(
+                    enabled: true,
+                    maxLength: 3,
+                    maxLengthEnforced: true,
+                    style: TextStyle(
+                      color:Colors.black,
+                      fontSize: 23.0,
+                    ),
+                    obscureText: false,
+                    maxLines:1,
+                    onChanged: _q1Text,
+                      decoration: new InputDecoration( contentPadding: const EdgeInsets.only(left:15.0)),
+                  ),
+                  Container(//2桁 + 2桁
+                    color : Colors.black,
+                    width: 380.0,
+                    height: 39.0,
+                    padding: EdgeInsets.only(left:10.0),
+                    child: Text(
+                      q2_n1.toString() + ' + ' +  q2_n2.toString() + ' = ' +  _a2 +  '    判定: ' + answer_judge2,
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        color:Colors.white,
+                      ),
+                    ),
+                  ),
+
+                  new  TextField(
+                    enabled: true,
+                    maxLength: 3,
+                    maxLengthEnforced: true,
+                    cursorColor: Colors.red,
+                    style: TextStyle(
+                      color:Colors.black,
+                      fontSize: 23.0,
+                    ),
+                    obscureText: false,
+                    maxLines:1,
+                    onChanged: _q2Text,
+                    decoration: new InputDecoration( contentPadding: const EdgeInsets.only(left:15.0)),
+                  ),
+                  Container(
+                    color: Colors.black,
+                    width: 380.0,
+                    height: 39.0,
+                    padding: EdgeInsets.only(left:10.0),
+                    child: Text(//3桁-2桁
+                      q3_n1.toString() + ' - ' +  q3_n2.toString() + ' = ' +  _a3 +  '    判定: ' + answer_judge3,
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  new TextField(
+                    enabled: true,
+                    maxLength: 3,
+                    maxLengthEnforced: true,
+                    style: TextStyle(
+                      color:Colors.black,
+                      fontSize: 23.0,
+                    ),
+                    obscureText: false,
+                    maxLines:1,
+                    onChanged: _q3Text,
+                    decoration: new InputDecoration( contentPadding: const EdgeInsets.only(left:15.0)),
+                  ),
+                ]
+            ),
         ),
     );
   }
@@ -758,7 +836,7 @@ class SubPage1 extends StatelessWidget {
     return new Scaffold(
       backgroundColor: Colors.black,
       appBar: new AppBar(
-
+        automaticallyImplyLeading: false,
         title: const Text('加速度ゲーム',
           style: TextStyle(color: Colors.black),
         ),
@@ -787,6 +865,10 @@ class _AccGameState extends State< _AccGame>
   //pop判定
   int _pop = 1;
 
+  //最大値と最小値
+  double max = 0.0;
+  double min = 0.0;
+
 
   void dispose() {//画面切り替え時:加速度データ取得を止める
     super.dispose();
@@ -810,6 +892,22 @@ class _AccGameState extends State< _AccGame>
   }
 
   void Accer_game_Judge() {
+    if(max < _Acceler_Values[0]){
+      max =_Acceler_Values[0];
+    }
+
+    if(max < _Acceler_Values[1]){
+      max = _Acceler_Values[1];
+    }
+
+    if(min > _Acceler_Values[0]) {
+      min = _Acceler_Values[0];
+    }
+
+    if(min > _Acceler_Values[1]) {
+      min = _Acceler_Values[1];
+    }
+
     if (
         _Acceler_Values[0] > 13.0 || _Acceler_Values[1] > 13.0 ||
         _Acceler_Values[0] < -13.0 || _Acceler_Values[1] < -13.0
@@ -824,31 +922,46 @@ class _AccGameState extends State< _AccGame>
     final String accel_x = _Acceler_Values[0].toStringAsFixed(1);
     final String accel_y = _Acceler_Values[1].toStringAsFixed(1);
 
+    final max_S = max.toStringAsFixed(1);
+    final min_S = min.toStringAsFixed(1);
+
     return Scaffold(
         body: Center(
         child: Column(
             children: <Widget>[
-              Text('X_data:  $accel_x',
-              style: TextStyle(
-                fontSize: 30.0,
-              )),
-              Text('Y_data:  $accel_y',
-              style: TextStyle(
-                fontSize: 30.0,
-              )),
-              Text('縦、横にスマホを振り、'
+              Padding(
+                padding: EdgeInsets.only(top:10.0),
+              ),
+
+              Text('縦、横にスマホを振り'
               ,
               style: TextStyle(
                 fontSize: 20.0,
               ),
               ),
-              Text('13以上または-13未満にしましょう'
+              Padding(
+                padding: EdgeInsets.only(top:5.0),
+              ),
+              Text('最大値が13以上または'
+                ,
+                style: TextStyle(
+                  fontSize: 20.0,
+                ),
+              ),
+              Text('最小値が-13未満になるとクリア'
                 ,
                 style: TextStyle(
                   fontSize: 20.0,
                 ),
               ),
               new Image.asset('images/GameDescription.PNG',width: 380.0, height:380.0),
+              Padding(
+                padding: EdgeInsets.only(top:30.0),
+              ),
+              Text('最大値:  $max_S 最小値:  $min_S',
+                  style: TextStyle(
+                    fontSize: 30.0,
+                  )),
           ]
         ),
         ),
