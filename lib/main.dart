@@ -5,7 +5,7 @@ import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'dart:math';
 import 'package:sensors/sensors.dart';
-//import 'game1.dart';
+import 'dart:io';
 
 void main() {
   runApp(MyApp());
@@ -52,6 +52,9 @@ class _MyHomePageState extends State<MyHomePage> {
   //時間を設定
    List<String> setTime = ['00:00','00:00','00:00','00:00','00:00'];
 
+   //時間表示
+   List<String> setTimeOutput = ['AM 00:00','AM 00:00','AM 00:00','AM 00:00','AM 00:00'];
+
   //現在時刻の変数
   String nowTime = '';
 
@@ -61,8 +64,8 @@ class _MyHomePageState extends State<MyHomePage> {
    //スイッチの切り替え
    List<bool> _active = [false,false,false,false,false];
    //スイッチの表示
-   List<String> switchText = ["設定していないよ.","設定していないよ.","設定していないよ."
-     ,"設定していないよ.","設定していないよ."];
+   List<String> switchText = ["設定してないよ.","設定してないよ.","設定してないよ."
+     ,"設定してないよ.","設定してないよ."];
 
 
   void initState() { //現在時刻を取得する関数(1秒ごとに判定)
@@ -88,31 +91,31 @@ class _MyHomePageState extends State<MyHomePage> {
       judge++;
       play();//アラーム再生
       gameSelect(scene);//ゲーム選択
-      switchText[0] = "設定していないよ";//アラームを止めた後にアラームがならないための処理
+      switchText[0] = "設定してないよ";//アラームを止めた後にアラームがならないための処理
     }
     else if (switchText[1] == "設定しているよ" && setTime[1] == nowTime) {
       judge++;
       play();//アラーム再生
       gameSelect(scene);//ゲーム選択
-      switchText[1] = "設定していないよ";//アラームを止めた後にアラームがならないための処理
+      switchText[1] = "設定してないよ";//アラームを止めた後にアラームがならないための処理
     }
     else if (switchText[2] == "設定しているよ" && setTime[2] == nowTime) {
       judge++;
       play();//アラーム再生
       gameSelect(scene);//ゲーム選択
-      switchText[2] = "設定していないよ";//アラームを止めた後にアラームがならないための処理
+      switchText[2] = "設定してないよ";//アラームを止めた後にアラームがならないための処理
     }
     else if (switchText[3] == "設定しているよ" && setTime[3] == nowTime) {
       judge++;
       play();//アラーム再生
       gameSelect(scene);//ゲーム選択
-      switchText[3] = "設定していないよ";//アラームを止めた後にアラームがならないための処理
+      switchText[3] = "設定してないよ";//アラームを止めた後にアラームがならないための処理
     }
     else if (switchText[4] == "設定しているよ" && setTime[4] == nowTime) {
       judge++;
       play();//アラーム再生
       gameSelect(scene);//ゲーム選択
-      switchText[4] = "設定していないよ";//アラームを止めた後にアラームがならないための処理
+      switchText[4] = "設定してないよ";//アラームを止めた後にアラームがならないための処理
     }
 
   }
@@ -149,8 +152,10 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     if (picked != null) {
       var dt = _toDateTime(picked);
+
       setState(() {
-        setTime[0] = (DateFormat.Hm()).format(dt);
+        setTimeOutput[0] = (DateFormat('a HH:mm')).format(dt);
+        setTime[0] = (DateFormat('HH:mm')).format(dt);
       });
     }
   }
@@ -164,7 +169,8 @@ class _MyHomePageState extends State<MyHomePage> {
     if (picked != null) {
       var dt = _toDateTime(picked);
       setState(() {
-        setTime[1] = (DateFormat.Hm()).format(dt);
+        setTimeOutput[1] = (DateFormat('a HH:mm')).format(dt);
+        setTime[1] = (DateFormat('HH:mm')).format(dt);
       });
     }
   }
@@ -178,7 +184,8 @@ class _MyHomePageState extends State<MyHomePage> {
     if (picked != null) {
       var dt = _toDateTime(picked);
       setState(() {
-        setTime[2] = (DateFormat.Hm()).format(dt);
+        setTimeOutput[2] = (DateFormat('a HH:mm')).format(dt);
+        setTime[2] = (DateFormat('HH:mm')).format(dt);
       });
     }
   }
@@ -192,7 +199,8 @@ class _MyHomePageState extends State<MyHomePage> {
     if (picked != null) {
       var dt = _toDateTime(picked);
       setState(() {
-        setTime[3] = (DateFormat.Hm()).format(dt);
+        setTimeOutput[3] = (DateFormat('a HH:mm')).format(dt);
+        setTime[3] = (DateFormat('HH:mm')).format(dt);
       });
     }
   }
@@ -205,8 +213,10 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     if (picked != null) {
       var dt = _toDateTime(picked);
+
       setState(() {
-        setTime[4] = (DateFormat.Hm()).format(dt);
+        setTimeOutput[4] = (DateFormat('a HH:mm')).format(dt);
+        setTime[4] = (DateFormat('HH:mm')).format(dt);
       });
     }
   }
@@ -231,10 +241,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top:9.0),
+            ),
             Text(
               "時間を設定しよう.",
               style: TextStyle(
-                fontSize: 25.0,
+                fontSize: 29.0,
               ),
             ),
 
@@ -250,7 +263,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   new RaisedButton(
                       onPressed: () => _selectTime1(context),
-                      child: new Text(setTime[0],
+                      child: new Text(setTimeOutput[0],
                         style: TextStyle(
                           fontSize: 25.0,
                         ),
@@ -273,7 +286,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             switchText[0] = '設定しているよ';
                           }
                           else {
-                            switchText[0] = '設定していないよ';
+                            switchText[0] = '設定してないよ';
                           }
                         });
                       },
@@ -299,7 +312,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 new RaisedButton(
                   onPressed: () => _selectTime2(context),
-                  child: new Text(setTime[1],
+                  child: new Text(setTimeOutput[1],
                     style: TextStyle(
                       fontSize: 25.0,
                     ),
@@ -323,7 +336,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         switchText[1] = '設定しているよ';
                       }
                       else {
-                        switchText[1] = '設定していないよ';
+                        switchText[1] = '設定してないよ';
                       }
                     });
                   },
@@ -348,7 +361,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   new RaisedButton(
                     onPressed: () => _selectTime3(context),
-                    child: new Text(setTime[2],
+                    child: new Text(setTimeOutput[2],
                       style: TextStyle(
                         fontSize: 25.0,
                       ),
@@ -372,7 +385,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           switchText[2] = '設定しているよ';
                         }
                         else {
-                          switchText[2] = '設定していないよ';
+                          switchText[2] = '設定してないよ';
                         }
                       });
                     },
@@ -399,7 +412,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   new RaisedButton(
                     onPressed: () => _selectTime4(context),
-                    child: new Text(setTime[3],
+                    child: new Text(setTimeOutput[3],
                       style: TextStyle(
                         fontSize: 25.0,
                       ),
@@ -423,7 +436,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           switchText[3] = '設定しているよ';
                         }
                         else {
-                          switchText[3] = '設定していないよ';
+                          switchText[3] = '設定してないよ';
                         }
                       });
                     },
@@ -450,7 +463,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   new RaisedButton(
                     onPressed: () => _selectTime5(context),
-                    child: new Text(setTime[4],
+                    child: new Text(setTimeOutput[4],
                       style: TextStyle(
                         fontSize: 25.0,
                       ),
@@ -474,7 +487,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           switchText[4] = '設定しているよ';
                         }
                         else {
-                          switchText[4] = '設定していないよ';
+                          switchText[4] = '設定してないよ';
                         }
                       });
                     },
@@ -562,7 +575,7 @@ class _GamePageState extends State<_GamePage> {
   int q3N2 = Random().nextInt(100);
 
   //回答の入力//
-  List<String> answerText = ['0','0','0'];
+  List<String> answerText = ['','',''];
 
   //回答の判定
   List<String> answerJudge = ['x','x','x'];
@@ -621,6 +634,7 @@ class _GamePageState extends State<_GamePage> {
   //3問目を回答する関数
   void _q3Text(String e) {
     String judge = 'x';
+
     var temp = q3N1 - q3N2;
 
     setState(() {answer[2] = temp.toString();});
@@ -635,12 +649,22 @@ class _GamePageState extends State<_GamePage> {
 
     if(answerJudge[0] == '〇' && answerJudge[1] == '〇' && answerJudge[2] == '〇'){
       FocusScope.of(context).requestFocus(FocusNode());
+      sleep(Duration(seconds: 3));
       Navigator.of(context).pop();
     }
   }
 
 
+
   Widget build(BuildContext context) {
+
+    while ( q3N1 < q3N2) {//回答は0以上のため答えが0以下になってしまった場合の判定
+
+      q3N1 = Random().nextInt(1000);
+      q3N2 = Random().nextInt(100);
+
+      var temp = q3N1 - q3N2;
+    }
 
     return Scaffold(
         body: Center(
