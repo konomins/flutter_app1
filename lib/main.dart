@@ -5,7 +5,6 @@ import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'dart:math';
 import 'package:sensors/sensors.dart';
-import 'dart:io';
 
 void main() {
   runApp(MyApp());
@@ -55,9 +54,6 @@ class _MyHomePageState extends State<MyHomePage> {
    //時間表示
    List<String> setTimeOutput = ['AM 00:00','AM 00:00','AM 00:00','AM 00:00','AM 00:00'];
 
-  //現在時刻の変数
-  String nowTime = '';
-
   //アラームを鳴らすか止めるかの判定
    var judge = 0;
 
@@ -78,6 +74,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
   void _onTimer(Timer timer) {//現在時刻を時、分にフォーマットし、アラームを鳴らす関数
+
+    String nowTime = ''; //現在時刻の変数
     var now = DateTime.now();
     var formatter = DateFormat('HH:mm');
     nowTime = formatter.format(now);
@@ -154,7 +152,7 @@ class _MyHomePageState extends State<MyHomePage> {
       var dt = _toDateTime(picked);
 
       setState(() {
-        setTimeOutput[0] = (DateFormat('a HH:mm')).format(dt);
+        setTimeOutput[0] = (DateFormat('a hh:mm')).format(dt);
         setTime[0] = (DateFormat('HH:mm')).format(dt);
       });
     }
@@ -169,7 +167,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (picked != null) {
       var dt = _toDateTime(picked);
       setState(() {
-        setTimeOutput[1] = (DateFormat('a HH:mm')).format(dt);
+        setTimeOutput[1] = (DateFormat('a hh:mm')).format(dt);
         setTime[1] = (DateFormat('HH:mm')).format(dt);
       });
     }
@@ -184,7 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (picked != null) {
       var dt = _toDateTime(picked);
       setState(() {
-        setTimeOutput[2] = (DateFormat('a HH:mm')).format(dt);
+        setTimeOutput[2] = (DateFormat('a hh:mm')).format(dt);
         setTime[2] = (DateFormat('HH:mm')).format(dt);
       });
     }
@@ -199,7 +197,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (picked != null) {
       var dt = _toDateTime(picked);
       setState(() {
-        setTimeOutput[3] = (DateFormat('a HH:mm')).format(dt);
+        setTimeOutput[3] = (DateFormat('a hh:mm')).format(dt);
         setTime[3] = (DateFormat('HH:mm')).format(dt);
       });
     }
@@ -215,7 +213,7 @@ class _MyHomePageState extends State<MyHomePage> {
       var dt = _toDateTime(picked);
 
       setState(() {
-        setTimeOutput[4] = (DateFormat('a HH:mm')).format(dt);
+        setTimeOutput[4] = (DateFormat('a hh:mm')).format(dt);
         setTime[4] = (DateFormat('HH:mm')).format(dt);
       });
     }
@@ -501,21 +499,27 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ),
-            Text(
+            /*Text(
               "ストップボタンを押すと",
               style: TextStyle(
                 fontSize: 34.0,
               ),
             ),
+             */
             Text(
             "アラームが止まるよ",
               style: TextStyle(
                 fontSize: 34.0,
               ),
             ),
-
+            Text(
+              "↓",
+              style: TextStyle(
+                fontSize: 34.0,
+              ),
+            ),
             Padding(
-              padding: EdgeInsets.only(bottom:15.0),
+              padding: EdgeInsets.only(bottom:8.0),
             ),
 
             RaisedButton(
@@ -561,10 +565,9 @@ class _GamePage extends StatefulWidget {
 
 class _GamePageState extends State<_GamePage> {
 
-
+  //問1: 2桁-1桁
   int q1N1 = Random().nextInt(100);
   int q1N2 = Random().nextInt(10);
-
 
   //問2: 2桁+2桁
   int q2N1 = Random().nextInt(100);
@@ -574,135 +577,136 @@ class _GamePageState extends State<_GamePage> {
   int q3N1 = Random().nextInt(1000);
   int q3N2 = Random().nextInt(100);
 
-  //回答の入力//
-  List<String> answerText = ['','',''];
+  //回答の入力
+  String answerText = '';
+
+  //回答判定の保存
+  List<String> answerJudge = ['x','x','x'];
 
   //回答の判定
-  List<String> answerJudge = ['x','x','x'];
+  String OutputA = '';
 
   //回答
   List<String> answer = ['','',''];
 
+  int trueCount = 0;
 
-  //正解個数
-  var correctCount = 0;
+  //式の表示
+  String output = '';
+
+  //表示用
+  String n1 = '';
+  String n2 = '';
+  String calC = ' × ';
+
 
   //1問目を回答する関数
-  void _q1Text(String e) {
-    var temp = q1N1 * q1N2;
-    String judge = 'x';
-
-    //答え判定
-    setState(() {answer[0] = temp.toString();});
-    //文字の入力を画面に反映
-    setState(() { answerText[0] = e;});
-    //入力した回答が正解かの判定
-    if (answerText[0] == answer[0]) {
-       judge = '〇';
-      correctCount++;
+  void _q1Text(String a) {
+    answer[0] = (q1N1 * q1N2).toString();//答え判定
+    answer[1] = (q2N1 + q2N2).toString();//答え判定
+    answer[2] = (q3N1 - q3N2).toString();//答え判定
+    while(q3N1 - q3N2 < 0){
+      q3N1 = Random().nextInt(1000);
+      q3N2 = Random().nextInt(100);
     }
-    setState(() {answerJudge[0] = judge;});
 
-    if(answerJudge[0] == '〇' && answerJudge[1] == '〇' && answerJudge[2] == '〇'){
+    setState(() { //配当の判定
+        answerText = a;
+
+      if (a == answer[0]) {//問1判定
+        answerJudge[0] = '〇';
+        trueCount++;
+      }
+        if (a == answer[1]) {//問2判定
+          answerJudge[1] = '〇';
+          trueCount++;
+        }
+        if (a == answer[2]) {//問3判定
+          answerJudge[2] = '〇';
+          trueCount++;
+        }
+
+    });
+
+    _allQuestion();
+  }
+
+void _allQuestion() {//全問正解か判定する関数
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    if (answerJudge[0] == '〇' && answerJudge[1] == '〇' &&
+        answerJudge[2] == '〇') {
       FocusScope.of(context).requestFocus(FocusNode());
       Navigator.of(context).pop();
     }
+  });
+}
 
+  Future<bool> _onBackPressed() async {//本体の戻るボタンを押しても戻らない関数
+    return false;
   }
-
-  //2問目を回答する関数
-  void _q2Text(String e) {
-    String judge = 'x';
-    var temp = q2N1 + q2N2;
-
-    setState(() {answer[1] = temp.toString();});
-
-    setState(() { answerText[1] = e;});
-
-    if(answerText[1] == answer[1]){
-      judge = '〇';
-    }
-
-    setState(() { answerJudge[1] = judge;});
-
-    if(answerJudge[0] == '〇' && answerJudge[1] == '〇' && answerJudge[2] == '〇'){
-      FocusScope.of(context).requestFocus(FocusNode());
-      Navigator.of(context).pop();
-    }
-  }
-
-  //3問目を回答する関数
-  void _q3Text(String e) {
-    String judge = 'x';
-
-    var temp = q3N1 - q3N2;
-
-    setState(() {answer[2] = temp.toString();});
-
-    setState(() { answerText[2] = e;});
-
-    if(answerText[2] == answer[2]){
-      judge = '〇';
-    }
-
-    setState(() { answerJudge[2] = judge;});
-
-    if(answerJudge[0] == '〇' && answerJudge[1] == '〇' && answerJudge[2] == '〇'){
-      FocusScope.of(context).requestFocus(FocusNode());
-      sleep(Duration(seconds: 3));
-      Navigator.of(context).pop();
-    }
-  }
-
 
 
   Widget build(BuildContext context) {
 
-    while ( q3N1 < q3N2) {//回答は0以上のため答えが0以下になってしまった場合の判定
+    n1 = q1N1.toString();
+    n2 = q1N2.toString();
+    OutputA = answerJudge[0];
 
-      q3N1 = Random().nextInt(1000);
-      q3N2 = Random().nextInt(100);
-
-      var temp = q3N1 - q3N2;
+    if(answerJudge[0] == '〇'){//問1表示
+      n1 = q2N1.toString();
+      n2 = q2N2.toString();
+      calC = ' + ';
+      OutputA = answerJudge[1];
+    }
+    if(answerJudge[1] == '〇'){
+    n1 = q3N1.toString();
+    n2 = q3N2.toString();
+    calC = ' - ';
+    OutputA = answerJudge[2];
     }
 
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+    child: Scaffold(
         body: Center(
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.only(top:5.0),
+                    padding: EdgeInsets.only(top:15.0),
                   ),
                   Text(
                       '解答欄に答えを入力しよう',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 18.0,
+                        fontSize: 24.0,
                       )
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top:10.0),
                   ),
                   Text(
                       '3問クリアすると元の画面に戻るよ',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 18.0,
+                        fontSize: 24.0,
                       )
                   ),
 
                   Padding(
-                    padding: EdgeInsets.only(top:5.0),
+                    padding: EdgeInsets.only(top:10.0),
                   ),
 
                   Container(
                     color : Colors.black,
                     width: 380.0,
-                    height: 39.0,
-                      padding: EdgeInsets.only(left:10.0),
+                    height: 68.0,
+                      padding: EdgeInsets.only(top: 10.0,left:30.0),
                     child:Text(//2桁×1桁
-                      q1N1.toString() + ' × ' +  q1N2.toString() + ' = ' +
-                          answerText[0] +  '    判定: ' + answerJudge[0],
+                      n1 +  calC +  n2  + ' = ' +
+                          answerText, //+  '    判定: ' + OutputA,
                       style: TextStyle(
-                        fontSize: 24.0,
+                        fontSize: 35.0,
                         color: Colors.white,
                       ),
                     ),
@@ -714,13 +718,14 @@ class _GamePageState extends State<_GamePage> {
                     maxLengthEnforced: true,
                     style: TextStyle(
                       color:Colors.black,
-                      fontSize: 23.0,
+                      fontSize: 35.0,
                     ),
                     obscureText: false,
                     maxLines:1,
                     onChanged: _q1Text,
-                      decoration: new InputDecoration( contentPadding: const EdgeInsets.only(left:15.0)),
+                      decoration: new InputDecoration( contentPadding: const EdgeInsets.only(top: 10.0,left:180.0)),
                   ),
+                  /*
                   Container(//2桁 + 2桁
                     color : Colors.black,
                     width: 380.0,
@@ -728,7 +733,7 @@ class _GamePageState extends State<_GamePage> {
                     padding: EdgeInsets.only(left:10.0),
                     child: Text(
                       q2N1.toString() + ' + ' +  q2N2.toString() + ' = ' +
-                          answerText[1] + '    判定: ' + answerJudge[1],
+                          answerText[0] + '    判定: ' + answerJudge[1],
                       style: TextStyle(
                         fontSize: 24.0,
                         color:Colors.white,
@@ -748,9 +753,10 @@ class _GamePageState extends State<_GamePage> {
                     ),
                     obscureText: false,
                     maxLines:1,
-                    onChanged: _q2Text,
+                    onChanged: _q1Text,
                     decoration: new InputDecoration( contentPadding: const EdgeInsets.only(left:15.0)),
                   ),
+
                   Container(
                     color: Colors.black,
                     width: 380.0,
@@ -776,12 +782,28 @@ class _GamePageState extends State<_GamePage> {
                     ),
                     obscureText: false,
                     maxLines:1,
-                    onChanged: _q3Text,
+                    onChanged: _q1Text,
                     decoration: new InputDecoration( contentPadding: const EdgeInsets.only(left:15.0)),
                   ),
+                   */
+                  Text(
+                    trueCount.toString() + ' / ' + '3',
+                      style: TextStyle(
+                        fontSize: 25.0,
+                      ),
+                  ),
+                      Text(
+                        '正解数 / 総問題数',
+                        style: TextStyle(
+                          fontSize: 25.0,
+                        ),
+                      ),
+
+
                 ]
             ),
         ),
+    ),
     );
   }
 }
@@ -874,12 +896,19 @@ class _AccGameState extends State< _AccGame>
     }
   }
 
+  Future<bool> _onBackPressed() async {//本体の戻るボタンを押しても戻らない関数
+    return false;
+  }
+
+
   Widget build(BuildContext context) {
 
     final maxS = max.toStringAsFixed(1);
     final minS = min.toStringAsFixed(1);
 
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+    child: Scaffold(
         body: Center(
         child: Column(
             children: <Widget>[
@@ -925,6 +954,7 @@ class _AccGameState extends State< _AccGame>
           ]
         ),
         ),
+    ),
     );
   }
 
