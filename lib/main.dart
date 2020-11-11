@@ -599,8 +599,9 @@ class _GamePageState extends State<_GamePage> {
   String n2 = '';
   String calC = ' × ';
 
+  var _controller = TextEditingController();
 
-  //1問目を回答する関数
+  //回答する関数
   void _q1Text(String a) {
     answer[0] = (q1N1 * q1N2).toString();//答え判定
     answer[1] = (q2N1 + q2N2).toString();//答え判定
@@ -611,21 +612,25 @@ class _GamePageState extends State<_GamePage> {
     }
 
     setState(() { //配当の判定
-        answerText = a;
+
+        answerText = a;//入力文字を反映
 
       if (a == answer[0]) {//問1判定
         answerJudge[0] = '〇';
         trueCount++;
+        answerText = '';
       }
-        if (a == answer[1]) {//問2判定
-          answerJudge[1] = '〇';
-          trueCount++;
+      if (a == answer[1]) {//問2判定
+        answerJudge[1] = '〇';
+        trueCount++;
+        answerText = '';
         }
-        if (a == answer[2]) {//問3判定
-          answerJudge[2] = '〇';
-          trueCount++;
+      if (a == answer[2]) {//問3判定
+        answerJudge[2] = '〇';
+        trueCount++;
         }
 
+      a = '';
     });
 
     _allQuestion();
@@ -633,16 +638,15 @@ class _GamePageState extends State<_GamePage> {
 
 void _allQuestion() {//全問正解か判定する関数
   WidgetsBinding.instance.addPostFrameCallback((_) {
-    if (answerJudge[0] == '〇' && answerJudge[1] == '〇' &&
-        answerJudge[2] == '〇') {
-      FocusScope.of(context).requestFocus(FocusNode());
+    if (trueCount == 3) {
+      FocusScope.of(context).requestFocus(new FocusNode());
       Navigator.of(context).pop();
     }
   });
 }
 
   Future<bool> _onBackPressed() async {//本体の戻るボタンを押しても戻らない関数
-    return false;
+    return false;//でバック用に変更
   }
 
 
@@ -652,7 +656,7 @@ void _allQuestion() {//全問正解か判定する関数
     n2 = q1N2.toString();
     OutputA = answerJudge[0];
 
-    if(answerJudge[0] == '〇'){//問1表示
+    if( answerJudge[0] == '〇'){//問1表示
       n1 = q2N1.toString();
       n2 = q2N2.toString();
       calC = ' + ';
@@ -703,14 +707,14 @@ void _allQuestion() {//全問正解か判定する関数
                     height: 68.0,
                       padding: EdgeInsets.only(top: 10.0,left:30.0),
                     child:Text(//2桁×1桁
-                      n1 +  calC +  n2  + ' = ' +
-                          answerText, //+  '    判定: ' + OutputA,
+                      n1 +  calC +  n2  + ' = ' + answerText,
                       style: TextStyle(
                         fontSize: 35.0,
                         color: Colors.white,
                       ),
                     ),
                   ),
+
                   new TextField(
                     keyboardType: TextInputType.number,
                     enabled: true,
@@ -722,70 +726,21 @@ void _allQuestion() {//全問正解か判定する関数
                     ),
                     obscureText: false,
                     maxLines:1,
+                    controller: _controller,
                     onChanged: _q1Text,
-                      decoration: new InputDecoration( contentPadding: const EdgeInsets.only(top: 10.0,left:180.0)),
-                  ),
-                  /*
-                  Container(//2桁 + 2桁
-                    color : Colors.black,
-                    width: 380.0,
-                    height: 39.0,
-                    padding: EdgeInsets.only(left:10.0),
-                    child: Text(
-                      q2N1.toString() + ' + ' +  q2N2.toString() + ' = ' +
-                          answerText[0] + '    判定: ' + answerJudge[1],
-                      style: TextStyle(
-                        fontSize: 24.0,
-                        color:Colors.white,
-                      ),
-                    ),
+                    decoration: new InputDecoration( contentPadding: const EdgeInsets.only(top: 10.0,left:180.0),
+                    suffixIcon: FloatingActionButton(
+                      onPressed: (() => _controller.clear()),
+                      child: const Text(
+                        '削除',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize:15.0,
+                        )
+                      )
+                    )),
                   ),
 
-                  new  TextField(
-                    keyboardType: TextInputType.number,
-                    enabled: true,
-                    maxLength: 3,
-                    maxLengthEnforced: true,
-                    cursorColor: Colors.red,
-                    style: TextStyle(
-                      color:Colors.black,
-                      fontSize: 23.0,
-                    ),
-                    obscureText: false,
-                    maxLines:1,
-                    onChanged: _q1Text,
-                    decoration: new InputDecoration( contentPadding: const EdgeInsets.only(left:15.0)),
-                  ),
-
-                  Container(
-                    color: Colors.black,
-                    width: 380.0,
-                    height: 39.0,
-                    padding: EdgeInsets.only(left:10.0),
-                    child: Text(//3桁-2桁
-                      q3N1.toString() + ' - ' +  q3N2.toString() + ' = ' +
-                          answerText[2] + '    判定: ' + answerJudge[2],
-                      style: TextStyle(
-                        fontSize: 24.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  new TextField(
-                    keyboardType: TextInputType.number,
-                    enabled: true,
-                    maxLength: 3,
-                    maxLengthEnforced: true,
-                    style: TextStyle(
-                      color:Colors.black,
-                      fontSize: 23.0,
-                    ),
-                    obscureText: false,
-                    maxLines:1,
-                    onChanged: _q1Text,
-                    decoration: new InputDecoration( contentPadding: const EdgeInsets.only(left:15.0)),
-                  ),
-                   */
                   Text(
                     trueCount.toString() + ' / ' + '3',
                       style: TextStyle(
@@ -798,8 +753,6 @@ void _allQuestion() {//全問正解か判定する関数
                           fontSize: 25.0,
                         ),
                       ),
-
-
                 ]
             ),
         ),
@@ -842,13 +795,19 @@ class _AccGameState extends State< _AccGame>
   List<double> _accelerateValues = [0,0,0];
   List<StreamSubscription<dynamic>> _streamSubscriptions = <StreamSubscription<dynamic>>[];
 
-  //pop判定
+  //pop判定(popしすぎないため)
   int _pop = 1;
 
-  //最大値と最小値
-  double max = 0.0;
-  double min = 0.0;
+  //矢印表示
+  String arrowImage = '';
 
+  int clearOutput = 0;
+
+
+  //矢印方向格納
+  //矢印方向確定
+  //値0:横 値1:縦
+  var arrowDirection = Random().nextInt(2);
 
   void dispose() {//画面切り替え時:加速度データ取得を止める
     super.dispose();
@@ -862,7 +821,7 @@ class _AccGameState extends State< _AccGame>
     _streamSubscriptions
         .add(userAccelerometerEvents.listen((UserAccelerometerEvent event) {
       setState(() {
-        _accelerateValues = <double>[event.x, event.y, event.z];
+        _accelerateValues = <double>[event.x, event.y];
         if(_pop == 1) {
           _accelerateGameJudge();
         }
@@ -871,40 +830,31 @@ class _AccGameState extends State< _AccGame>
   }
 
   void _accelerateGameJudge() {
-    if(max < _accelerateValues[0]){
-      max =_accelerateValues[0];
+    if (arrowDirection == 0) { //画像判定
+      arrowImage = 'images/side.PNG';
+      if (_accelerateValues[0] > 30 ||
+          _accelerateValues[0] < -30) {
+          Navigator.of(context).pop();
+          _pop = 0;
+      }
     }
-
-    if(max < _accelerateValues[1]){
-      max = _accelerateValues[1];
-    }
-
-    if(min > _accelerateValues[0]) {
-      min = _accelerateValues[0];
-    }
-
-    if(min > _accelerateValues[1]) {
-      min = _accelerateValues[1];
-    }
-
-    if (
-        _accelerateValues[0] > 13.0 || _accelerateValues[1] > 13.0 ||
-        _accelerateValues[0] < -13.0 || _accelerateValues[1] < -13.0
-    ) {
-      Navigator.of(context).pop();
-      _pop = 0;
+    else if (arrowDirection == 1) {
+      arrowImage = 'images/vertical.PNG';
+      if (_accelerateValues[1] > 22 ||
+          _accelerateValues[1] < -22) {
+        Navigator.of(context).pop();
+        _pop = 0;
+      }
     }
   }
 
+
   Future<bool> _onBackPressed() async {//本体の戻るボタンを押しても戻らない関数
-    return false;
+    return false;//でバック用に変更
   }
 
 
   Widget build(BuildContext context) {
-
-    final maxS = max.toStringAsFixed(1);
-    final minS = min.toStringAsFixed(1);
 
     return WillPopScope(
       onWillPop: _onBackPressed,
@@ -913,44 +863,30 @@ class _AccGameState extends State< _AccGame>
         child: Column(
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(top:10.0),
+                padding: EdgeInsets.only(top:5.0),
               ),
 
-              Text('縦、横にスマホを振り'
-              ,
-              style: TextStyle(
-                fontSize: 20.0,
+              Padding(
+                padding: EdgeInsets.only(top:30.0),
               ),
+              Text(
+                  '矢印の方向に振ろう!',
+                style: TextStyle(
+                  fontSize: 26.0,
+                )
               ),
               Padding(
                 padding: EdgeInsets.only(top:5.0),
               ),
-              Text('最大値が13以上または'
-                ,
-                style: TextStyle(
-                  fontSize: 20.0,
-                ),
-              ),
-              Text('最小値が-13未満になるとクリア'
-                ,
-                style: TextStyle(
-                  fontSize: 20.0,
-                ),
-              ),
-              Text('クリアすると元の画面に戻るよ'
-                ,
-                style: TextStyle(
-                  fontSize: 20.0,
-                ),
-              ),
-              new Image.asset('images/GameDescription.PNG',width: 380.0, height:380.0),
+              new Image.asset(arrowImage ,width: 150.0, height: 150.0),
               Padding(
-                padding: EdgeInsets.only(top:30.0),
+                padding: EdgeInsets.only(top:5.0),
               ),
-              Text('最大値:  $maxS 最小値:  $minS',
-                  style: TextStyle(
-                    fontSize: 30.0,
-                  )),
+              Text("画面が戻るとクリア",
+              style: TextStyle(
+                fontSize: 26.0,
+              )
+              ),
           ]
         ),
         ),
