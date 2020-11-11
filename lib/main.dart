@@ -231,6 +231,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomPadding:false,
       appBar: AppBar(
         title: Text(widget.title),
       ),
@@ -577,76 +578,69 @@ class _GamePageState extends State<_GamePage> {
   int q3N1 = Random().nextInt(1000);
   int q3N2 = Random().nextInt(100);
 
-  //回答の入力
+  //回答の入力文字列型の数字
   String answerText = '';
 
   //回答判定の保存
   List<String> answerJudge = ['x','x','x'];
 
-  //回答の判定
-  String OutputA = '';
-
-  //回答
+  //回答文字列型の数字
   List<String> answer = ['','',''];
 
+  //回答の数
   int trueCount = 0;
 
   //式の表示
-  String output = '';
+  String output = ''; //式全体
+  String n1 = '';//計算式の左側の数
+  String n2 = '';//計算式の右側の数
+  String calC = ' × ';//計算符号
 
-  //表示用
-  String n1 = '';
-  String n2 = '';
-  String calC = ' × ';
-
-  var _controller = TextEditingController();
+  var _controller = TextEditingController();//フォームの処理
 
   //回答する関数
   void _q1Text(String a) {
     answer[0] = (q1N1 * q1N2).toString();//答え判定
     answer[1] = (q2N1 + q2N2).toString();//答え判定
     answer[2] = (q3N1 - q3N2).toString();//答え判定
-    while(q3N1 - q3N2 < 0){
+    while(q3N1 - q3N2 < 0){//答えがマイナスにならないように処理
       q3N1 = Random().nextInt(1000);
       q3N2 = Random().nextInt(100);
     }
 
-    setState(() { //配当の判定
+    setState(() {
 
         answerText = a;//入力文字を反映
 
-      if (a == answer[0]) {//問1判定
+        //処理を軽くするためif文の順序を逆に
+        if (a == answer[2]) {//問3判定
+          answerJudge[2] = '〇';
+          trueCount++;
+          FocusScope.of(context).requestFocus(new FocusNode());
+          _allQuestion();
+        }
+        else if (a == answer[1]) {//問2判定
+          answerJudge[1] = '〇';
+          trueCount++;
+          answerText = '';
+        }
+        else if (a == answer[0]) {//問1判定
         answerJudge[0] = '〇';
         trueCount++;
         answerText = '';
       }
-      if (a == answer[1]) {//問2判定
-        answerJudge[1] = '〇';
-        trueCount++;
-        answerText = '';
-        }
-      if (a == answer[2]) {//問3判定
-        answerJudge[2] = '〇';
-        trueCount++;
-        }
-
-      a = '';
     });
-
-    _allQuestion();
   }
 
-void _allQuestion() {//全問正解か判定する関数
-  WidgetsBinding.instance.addPostFrameCallback((_) {
+  void _allQuestion() {//全問正解か判定する関数
+  WidgetsBinding.instance.addPostFrameCallback((_) {//3問目の回答の表示をさせる
     if (trueCount == 3) {
-      FocusScope.of(context).requestFocus(new FocusNode());
       Navigator.of(context).pop();
-    }
-  });
-}
+    }});
+  }
 
   Future<bool> _onBackPressed() async {//本体の戻るボタンを押しても戻らない関数
-    return false;//でバック用に変更
+    return true;//でバック用に変更
   }
 
 
@@ -654,19 +648,16 @@ void _allQuestion() {//全問正解か判定する関数
 
     n1 = q1N1.toString();
     n2 = q1N2.toString();
-    OutputA = answerJudge[0];
 
     if( answerJudge[0] == '〇'){//問1表示
       n1 = q2N1.toString();
       n2 = q2N2.toString();
       calC = ' + ';
-      OutputA = answerJudge[1];
     }
     if(answerJudge[1] == '〇'){
     n1 = q3N1.toString();
     n2 = q3N2.toString();
     calC = ' - ';
-    OutputA = answerJudge[2];
     }
 
     return WillPopScope(
@@ -740,19 +731,18 @@ void _allQuestion() {//全問正解か判定する関数
                       )
                     )),
                   ),
-
                   Text(
                     trueCount.toString() + ' / ' + '3',
                       style: TextStyle(
                         fontSize: 25.0,
                       ),
                   ),
-                      Text(
-                        '正解数 / 総問題数',
-                        style: TextStyle(
-                          fontSize: 25.0,
-                        ),
-                      ),
+                  Text(
+                    '正解数 / 総問題数',
+                    style: TextStyle(
+                      fontSize: 25.0,
+                    ),
+                  ),
                 ]
             ),
         ),
@@ -767,7 +757,6 @@ class SubPage1 extends StatelessWidget {
 
   Widget build(BuildContext content) {
     return new Scaffold(
-      backgroundColor: Colors.black,
       appBar: new AppBar(
         automaticallyImplyLeading: false,
         title: const Text('加速度ゲーム',
@@ -783,13 +772,11 @@ class SubPage1 extends StatelessWidget {
 
 class _AccGame extends StatefulWidget {
   @override
-
   _AccGameState createState() => _AccGameState();
 }
 
 class _AccGameState extends State< _AccGame>
 {
-
   //加速度データ取得
   //nullの例外処理は初期値を与えることでなくなる
   List<double> _accelerateValues = [0,0,0];
@@ -801,10 +788,6 @@ class _AccGameState extends State< _AccGame>
   //矢印表示
   String arrowImage = '';
 
-  int clearOutput = 0;
-
-
-  //矢印方向格納
   //矢印方向確定
   //値0:横 値1:縦
   var arrowDirection = Random().nextInt(2);
@@ -823,13 +806,13 @@ class _AccGameState extends State< _AccGame>
       setState(() {
         _accelerateValues = <double>[event.x, event.y];
         if(_pop == 1) {
-          _accelerateGameJudge();
+            _accelerateGameJudge();
         }
       });
     }));
   }
 
-  void _accelerateGameJudge() {
+  void _accelerateGameJudge() {//矢印画像の取得とクリア判定
     if (arrowDirection == 0) { //画像判定
       arrowImage = 'images/side.PNG';
       if (_accelerateValues[0] > 30 ||
@@ -848,50 +831,47 @@ class _AccGameState extends State< _AccGame>
     }
   }
 
-
   Future<bool> _onBackPressed() async {//本体の戻るボタンを押しても戻らない関数
     return false;//でバック用に変更
   }
 
-
   Widget build(BuildContext context) {
 
-    return WillPopScope(
-      onWillPop: _onBackPressed,
-    child: Scaffold(
-        body: Center(
-        child: Column(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(top:5.0),
-              ),
+      return WillPopScope(
+        onWillPop: _onBackPressed,
+        child: Scaffold(
+          body: Center(
+            child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(top: 5.0),
+                  ),
 
-              Padding(
-                padding: EdgeInsets.only(top:30.0),
-              ),
-              Text(
-                  '矢印の方向に振ろう!',
-                style: TextStyle(
-                  fontSize: 26.0,
-                )
-              ),
-              Padding(
-                padding: EdgeInsets.only(top:5.0),
-              ),
-              new Image.asset(arrowImage ,width: 150.0, height: 150.0),
-              Padding(
-                padding: EdgeInsets.only(top:5.0),
-              ),
-              Text("画面が戻るとクリア",
-              style: TextStyle(
-                fontSize: 26.0,
-              )
-              ),
-          ]
+                  Padding(
+                    padding: EdgeInsets.only(top: 30.0),
+                  ),
+                  Text(
+                      '矢印の方向に振ろう!',
+                      style: TextStyle(
+                        fontSize: 26.0,
+                      )
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10.0),
+                  ),
+                  new Image.asset(arrowImage, width: 150.0, height: 150.0),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10.0),
+                  ),
+                  Text("画面が戻るとクリア",
+                      style: TextStyle(
+                        fontSize: 26.0,
+                      )
+                  ),
+                ]
+            ),
+          ),
         ),
-        ),
-    ),
-    );
+      );
+    }
   }
-
-}
